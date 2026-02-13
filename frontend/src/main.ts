@@ -5,6 +5,7 @@ import App from "./App.vue";
 import router from "./app/router";
 
 import "./styles/base.css";
+import "./styles/brand.css";
 import "./styles/tailwind.css";
 
 const app = createApp(App);

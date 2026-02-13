@@ -11,7 +11,7 @@ const emit = defineEmits<{ (e: "update:modelValue", value: string): void }>();
   <select
     :value="modelValue"
     :aria-label="ariaLabel"
-    class="rounded-xl border border-brand-200 bg-white px-3 py-2 text-sm"
+    class="brand-select px-3 py-2.5 text-[1.03rem] outline-none"
     @change="emit('update:modelValue', ($event.target as HTMLSelectElement).value)"
   >
     <option v-for="option in options" :key="option.value" :value="option.value">{{ option.label }}</option>

@@ -14,11 +14,10 @@ async function onConfirm() {
 
 <template>
   <UiModal :open="Boolean(ui.confirm)" :title="ui.confirm?.title" @close="ui.closeConfirm">
-    <p class="mb-4 text-sm text-ink">{{ ui.confirm?.message }}</p>
+    <p class="mb-4 text-[1.06rem] text-ink">{{ ui.confirm?.message }}</p>
     <div class="flex justify-end gap-2">
-      <UiButton variant="ghost" @click="ui.closeConfirm">{{ ui.confirm?.cancelText || "РћС‚РјРµРЅР°" }}</UiButton>
-      <UiButton variant="danger" @click="onConfirm">{{ ui.confirm?.confirmText || "РџРѕРґС‚РІРµСЂРґРёС‚СЊ" }}</UiButton>
+      <UiButton variant="ghost" @click="ui.closeConfirm">{{ ui.confirm?.cancelText || "Отмена" }}</UiButton>
+      <UiButton variant="danger" @click="onConfirm">{{ ui.confirm?.confirmText || "Подтвердить" }}</UiButton>
     </div>
   </UiModal>
 </template>
-

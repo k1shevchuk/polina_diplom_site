@@ -6,7 +6,7 @@ const ui = useUiStore();
 function toastColor(type: "success" | "error" | "info") {
   if (type === "success") return "bg-emerald-600";
   if (type === "error") return "bg-red-600";
-  return "bg-ink";
+  return "bg-primary-dark";
 }
 </script>
 
@@ -15,7 +15,7 @@ function toastColor(type: "success" | "error" | "info") {
     <div
       v-for="toast in ui.toasts"
       :key="toast.id"
-      class="pointer-events-auto rounded-xl px-4 py-3 text-sm font-semibold text-white shadow-soft"
+      class="pointer-events-auto rounded-2xl border border-white/20 px-4 py-3 text-[1.02rem] font-semibold text-white shadow-soft"
       :class="toastColor(toast.type)"
       role="status"
       aria-live="polite"
