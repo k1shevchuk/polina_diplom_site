@@ -1,76 +1,81 @@
-# Handmade Marketplace MVP
+# Craft With Love MVP
 
-MVP РјР°СЂРєРµС‚РїР»РµР№СЃР° РёР·РґРµР»РёР№ СЂСѓС‡РЅРѕР№ СЂР°Р±РѕС‚С‹ РЅР° СЃС‚РµРєРµ `Vue 3 + FastAPI + MySQL`.
+MVP маркетплейса вязаных изделий ручной работы (`Vue 3 + FastAPI + MySQL`).
+Бренд: **Craft With Love**. Тон: «Связано с любовью».
 
-## Stack
+## Стек
 - Frontend: Vue 3, Vite, TypeScript, Vue Router, Pinia, Tailwind
 - Backend: FastAPI, SQLAlchemy 2.x (sync), Alembic
 - DB: MySQL 8
 - Dev/Prod: Docker Compose, Nginx, certbot (Let's Encrypt)
 
-## Repository layout
-- `backend/` API, РјРѕРґРµР»Рё, СЃРµСЂРІРёСЃС‹, РјРёРіСЂР°С†РёРё, С‚РµСЃС‚С‹
-- `frontend/` SPA (public/buyer/seller/admin)
-- `infra/nginx/` РєРѕРЅС„РёРіРё reverse proxy
-- `scripts/` seed Рё РІСЃРїРѕРјРѕРіР°С‚РµР»СЊРЅС‹Рµ СЃРєСЂРёРїС‚С‹
+## Структура репозитория
+- `backend/` — API, модели, сервисы, миграции, pytest
+- `frontend/` — SPA (public/buyer/seller/admin)
+- `infra/nginx/` — конфиги reverse proxy
+- `scripts/` — сидинг и утилиты
+- `docs/reference-audit.md` — аудит референса knitwear
 
-## Local run (Windows + Docker Desktop)
-1. РЎРѕР·РґР°С‚СЊ `.env` РёР· С€Р°Р±Р»РѕРЅР°:
+## Локальный запуск (Windows + Docker Desktop)
+1. Создать `.env` из шаблона:
    - PowerShell: `Copy-Item .env.example .env`
-2. РџРѕРґРЅСЏС‚СЊ СЃРµСЂРІРёСЃС‹:
+2. Поднять сервисы:
    - `make up`
-3. РџСЂРёРјРµРЅРёС‚СЊ РјРёРіСЂР°С†РёРё (РѕС‚РґРµР»СЊРЅРѕ РѕС‚ СЃС‚Р°СЂС‚Р° backend):
+3. Применить миграции:
    - `make migrate`
-4. Р—Р°РїРѕР»РЅРёС‚СЊ РґРµРјРѕ-РґР°РЅРЅС‹РјРё:
+4. Выполнить сидинг демо-данных:
    - `make seed`
-   - РџСЂРёРјРµС‡Р°РЅРёРµ: РµСЃР»Рё РІС…РѕРґ РїРѕРґ demo-Р°РєРєР°СѓРЅС‚Р°РјРё РЅРµ СЂР°Р±РѕС‚Р°РµС‚, РїСЂРѕРІРµСЂСЊС‚Рµ С‡С‚Рѕ СЃРёРґРёРЅРі СѓСЃРїРµС€РЅРѕ РІС‹РїРѕР»РЅРёР»СЃСЏ.
 
-### URLs
+### URL
 - Frontend: `http://localhost:5173`
 - Backend docs (OpenAPI): `http://localhost:8000/docs`
-- Adminer: `make tools-up`, Р·Р°С‚РµРј `http://localhost:8080`
+- Adminer: `make tools-up` -> `http://localhost:8080`
 
-## Why backend no longer restarts
-`backend` С‚РµРїРµСЂСЊ Р·Р°РїСѓСЃРєР°РµС‚ С‚РѕР»СЊРєРѕ `uvicorn`.  
-РњРёРіСЂР°С†РёРё РІС‹РїРѕР»РЅСЏСЋС‚СЃСЏ РѕС‚РґРµР»СЊРЅРѕР№ РєРѕРјР°РЅРґРѕР№ `make migrate`, РїРѕСЌС‚РѕРјСѓ РїР°РґРµРЅРёРµ РјРёРіСЂР°С†РёР№ РЅРµ СѓРІРѕРґРёС‚ СЃРµСЂРІРёСЃ РІ restart loop.
-
-## Migrations
-- `make migrate`
-- РІСЂСѓС‡РЅСѓСЋ:
-  - `docker compose run --rm migrate`
-  - РёР»Рё РІРЅСѓС‚СЂРё backend: `alembic upgrade head`
-
-## Test accounts (seed)
+## Демо-аккаунты
 - `admin@example.com` / `Admin12345`
 - `seller@example.com` / `Seller12345`
 - `buyer@example.com` / `Buyer12345`
 
-Р•СЃР»Рё Р»РѕРіРёРЅ РґР°С‘С‚ 401:
-1. РЈР±РµРґРёС‚РµСЃСЊ, С‡С‚Рѕ Р‘Р” РЅРµ Р±С‹Р»Р° РѕС‡РёС‰РµРЅР° (`make clean` СѓРґР°Р»СЏРµС‚ volume СЃ РґР°РЅРЅС‹РјРё).
-2. Р’С‹РїРѕР»РЅРёС‚Рµ РјРёРіСЂР°С†РёРё: `make migrate`
-3. Р’С‹РїРѕР»РЅРёС‚Рµ СЃРёРґРёРЅРі: `make seed`
+Если не получается авторизоваться (401/invalid credentials), обычно причина в том, что сидинг не запускался для текущего volume БД.
+Проверьте по шагам:
+1. `make migrate`
+2. `make seed`
+3. Повторите вход
 
-## Quality checks
+Если выполнялся `make clean`, данные БД удаляются, сидинг нужно выполнить заново.
+
+## Миграции
+- Основной путь: `make migrate`
+- Вручную:
+  - `docker compose run --rm migrate`
+  - или внутри backend: `alembic upgrade head`
+
+## Почему backend не уходит в restart loop
+`backend` запускает только `uvicorn`.
+Миграции вынесены отдельно (`make migrate` / service `migrate`), поэтому падение миграции не перезапускает API по кругу.
+
+## Проверки качества
 - Backend lint: `docker compose exec backend ruff check app tests`
-- Backend tests: `docker compose exec backend pytest`
-- Frontend lint/test/build:
-  - `docker compose run --rm --no-deps frontend sh -c "npm install && npm run lint && npm run test && npm run build"`
+- Backend tests: `docker compose run --rm backend pytest -q`
+- Frontend lint: `docker compose run --rm --no-deps frontend npm run lint`
+- Frontend tests: `docker compose run --rm --no-deps frontend npm run test`
+- Frontend build: `docker compose run --rm --no-deps frontend npm run build`
 
 ## Production deploy (VM)
-1. Install Docker + Docker Compose plugin.
-2. Open ports `80` and `443`.
-3. DNS in reg.ru:
+1. Установить Docker Engine + Docker Compose plugin.
+2. Открыть порты `80` и `443`.
+3. DNS в reg.ru:
    - `A @ -> <VM_IP>`
    - `A www -> <VM_IP>`
-4. Fill `.env` (`DOMAIN`, `EMAIL`, secure `SECRET_KEY`, production `DATABASE_URL`).
-5. Start stack:
+4. Заполнить `.env` (минимум: `DOMAIN`, `EMAIL`, `SECRET_KEY`, `DATABASE_URL`).
+5. Запустить прод-стек:
    - `docker compose -f docker-compose.prod.yml up -d --build`
-6. Issue certificate:
+6. Выпустить сертификат:
    - `docker compose -f docker-compose.prod.yml run --rm certbot certonly --webroot -w /var/www/certbot -d your-domain.tld -d www.your-domain.tld --email your-email@domain.tld --agree-tos --no-eff-email`
-7. Restart Nginx:
+7. Перезапустить Nginx:
    - `docker compose -f docker-compose.prod.yml restart nginx`
 
-## Backups
+## Резервные копии
 - MySQL dump:
   - `docker compose exec db mysqldump -u root -p$MYSQL_ROOT_PASSWORD $MYSQL_DATABASE > backup.sql`
 - Media volume:
