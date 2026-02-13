@@ -1,20 +1,54 @@
+<script setup lang="ts">
+import BrandFooter from "./BrandFooter.vue";
+import BrandHeader from "./BrandHeader.vue";
+</script>
+
 <template>
-  <div class="min-h-screen bg-canvas">
-    <div class="mx-auto grid max-w-7xl grid-cols-1 gap-4 px-4 py-4 md:grid-cols-[220px_1fr] md:px-6">
-      <aside class="rounded-2xl bg-white p-4 shadow-soft">
-        <h2 class="mb-3 font-display text-lg font-bold">РџРѕРєСѓРїР°С‚РµР»СЊ</h2>
-        <nav class="space-y-2 text-sm">
-          <router-link class="block" to="/orders">РњРѕРё Р·Р°РєР°Р·С‹</router-link>
-          <router-link class="block" to="/favorites">РР·Р±СЂР°РЅРЅРѕРµ</router-link>
-          <router-link class="block" to="/messages">РЎРѕРѕР±С‰РµРЅРёСЏ</router-link>
-          <router-link class="block" to="/notifications">РЈРІРµРґРѕРјР»РµРЅРёСЏ</router-link>
-          <router-link class="block" to="/me">РџСЂРѕС„РёР»СЊ</router-link>
+  <div class="brand-page">
+    <BrandHeader />
+    <main class="brand-main">
+      <div class="brand-container px-4 py-8 md:px-0">
+        <nav class="mb-6 flex flex-wrap gap-2 rounded-2xl border border-brand-100 bg-white/90 p-3 text-[1.15rem] shadow-soft">
+          <router-link
+            class="rounded-full px-4 py-1.5 text-primary-dark transition hover:bg-brand-100"
+            active-class="bg-brand-gradient text-white"
+            to="/orders"
+          >
+            Мои заказы
+          </router-link>
+          <router-link
+            class="rounded-full px-4 py-1.5 text-primary-dark transition hover:bg-brand-100"
+            active-class="bg-brand-gradient text-white"
+            to="/favorites"
+          >
+            Избранное
+          </router-link>
+          <router-link
+            class="rounded-full px-4 py-1.5 text-primary-dark transition hover:bg-brand-100"
+            active-class="bg-brand-gradient text-white"
+            to="/messages"
+          >
+            Сообщения
+          </router-link>
+          <router-link
+            class="rounded-full px-4 py-1.5 text-primary-dark transition hover:bg-brand-100"
+            active-class="bg-brand-gradient text-white"
+            to="/notifications"
+          >
+            Уведомления
+          </router-link>
+          <router-link
+            class="rounded-full px-4 py-1.5 text-primary-dark transition hover:bg-brand-100"
+            active-class="bg-brand-gradient text-white"
+            to="/me"
+          >
+            Профиль
+          </router-link>
         </nav>
-      </aside>
-      <section class="rounded-2xl bg-white p-4 shadow-soft md:p-6">
+
         <router-view />
-      </section>
-    </div>
+      </div>
+    </main>
+    <BrandFooter />
   </div>
 </template>
-

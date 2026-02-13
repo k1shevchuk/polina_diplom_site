@@ -11,6 +11,10 @@ const routes: RouteRecordRaw[] = [
       { path: "catalog", component: () => import("../../views/public/CatalogView.vue"), meta: { public: true } },
       { path: "product/:id", component: () => import("../../views/public/ProductView.vue"), meta: { public: true } },
       { path: "seller/:id", component: () => import("../../views/public/SellerPublicView.vue"), meta: { public: true } },
+      { path: "about", component: () => import("../../views/public/AboutView.vue"), meta: { public: true } },
+      { path: "customers", component: () => import("../../views/public/CustomersView.vue"), meta: { public: true } },
+      { path: "reviews", redirect: "/customers" },
+      { path: "account", redirect: "/me" },
       { path: "auth/login", component: () => import("../../views/public/LoginView.vue"), meta: { public: true } },
       { path: "auth/register", component: () => import("../../views/public/RegisterView.vue"), meta: { public: true } },
     ],
@@ -65,8 +69,11 @@ const routes: RouteRecordRaw[] = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
-  scrollBehavior() {
-    return { top: 0 };
+  scrollBehavior(to) {
+    if (to.hash) {
+      return { el: to.hash, top: 96, behavior: "smooth" };
+    }
+    return { top: 0, behavior: "smooth" };
   },
 });
 

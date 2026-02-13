@@ -1,61 +1,111 @@
 <script setup lang="ts">
-import { onMounted } from "vue";
+import { computed, onMounted } from "vue";
 
 import UiButton from "../../components/ui/UiButton.vue";
-import UiCard from "../../components/ui/UiCard.vue";
 import UiSkeleton from "../../components/ui/UiSkeleton.vue";
 import { useUiStore } from "../../app/stores/ui";
 import { useCartStore } from "../../features/cart/store";
 import { formatCurrency } from "../../shared/utils/currency";
 
-const store = useCartStore();
+const cartStore = useCartStore();
 const ui = useUiStore();
 
-onMounted(() => {
-  store.fetchCart();
-});
+const fallbacks = [
+  "/brand/products/scarf1.jpg",
+  "/brand/products/mittens1.jpg",
+  "/brand/products/socks1.jpg",
+  "/brand/products/cardigan1.jpg",
+  "/brand/products/dress1.jpg",
+  "/brand/products/skirt1.jpg",
+  "/brand/products/bag1.jpg",
+  "/brand/products/sweater1.jpg",
+];
+
+const deliveryFee = computed(() => (cartStore.cart?.items.length ? 500 : 0));
+const grandTotal = computed(() => Number(cartStore.cart?.total_amount ?? 0) + deliveryFee.value);
+
+function fallbackImage(productId: number) {
+  return fallbacks[productId % fallbacks.length];
+}
 
 function removeItem(id: number) {
   ui.askConfirm({
-    title: "РЈРґР°Р»РёС‚СЊ С‚РѕРІР°СЂ",
-    message: "РўРѕРІР°СЂ Р±СѓРґРµС‚ СѓРґР°Р»С‘РЅ РёР· РєРѕСЂР·РёРЅС‹.",
-    confirmText: "РЈРґР°Р»РёС‚СЊ",
+    title: "Удалить товар",
+    message: "Товар будет удалён из корзины.",
+    confirmText: "Удалить",
     onConfirm: async () => {
-      await store.removeItem(id);
-      ui.pushToast("success", "РўРѕРІР°СЂ СѓРґР°Р»С‘РЅ РёР· РєРѕСЂР·РёРЅС‹");
+      await cartStore.removeItem(id);
+      ui.pushToast("success", "Товар удалён из корзины");
     },
   });
 }
+
+onMounted(() => {
+  cartStore.fetchCart();
+});
 </script>
 
 <template>
-  <section>
-    <h1 class="mb-4 font-display text-2xl font-bold">РљРѕСЂР·РёРЅР°</h1>
-    <UiSkeleton v-if="store.isLoading" :rows="3" />
+  <section class="space-y-6">
+    <header class="rounded-[20px] bg-[linear-gradient(135deg,rgba(255,209,228,0.85),rgba(255,210,227,0.95))] p-6 md:p-8">
+      <h1 class="brand-title text-4xl font-bold text-primary-dark md:text-5xl">Ваша корзина</h1>
+      <p class="mt-2 text-[1.16rem] text-primary-dark/85">Проверьте состав заказа перед оформлением</p>
+    </header>
 
-    <div v-else-if="!store.cart || store.cart.items.length === 0" class="rounded-2xl border border-dashed border-brand-300 p-6 text-center">
-      <h2 class="font-display text-xl font-bold">РљРѕСЂР·РёРЅР° РїСѓСЃС‚Р°</h2>
-      <p class="mt-1 text-sm text-ink/70">Р”РѕР±Р°РІСЊС‚Рµ С‚РѕРІР°СЂС‹ РёР· РєР°С‚Р°Р»РѕРіР°, С‡С‚РѕР±С‹ РѕС„РѕСЂРјРёС‚СЊ Р·Р°РєР°Р·.</p>
-      <router-link to="/catalog" class="mt-3 inline-block text-sm font-semibold">РћС‚РєСЂС‹С‚СЊ РєР°С‚Р°Р»РѕРі</router-link>
-    </div>
+    <UiSkeleton v-if="cartStore.isLoading" :rows="4" />
 
-    <div v-else class="space-y-3">
-      <UiCard v-for="item in store.cart.items" :key="item.id" class="flex items-center justify-between">
-        <div>
-          <h3 class="font-semibold">{{ item.title }}</h3>
-          <p class="text-sm text-ink/70">{{ item.qty }} x {{ formatCurrency(item.price) }}</p>
-        </div>
-        <div class="flex items-center gap-3">
-          <strong>{{ formatCurrency(Number(item.price) * item.qty) }}</strong>
-          <UiButton variant="danger" @click="removeItem(item.id)">РЈРґР°Р»РёС‚СЊ</UiButton>
-        </div>
-      </UiCard>
+    <section v-else-if="!cartStore.cart || cartStore.cart.items.length === 0" class="brand-empty-state p-8 text-center">
+      <h2 class="brand-title text-4xl font-bold text-primary-dark">Корзина пуста</h2>
+      <p class="mt-2 text-[1.12rem] text-muted">Добавьте вязаные изделия из каталога, чтобы оформить заказ.</p>
+      <router-link to="/catalog" class="brand-btn mt-4 px-6 py-3">Перейти в каталог</router-link>
+    </section>
 
-      <div class="flex items-center justify-between rounded-2xl bg-brand-50 p-4">
-        <strong>РС‚РѕРіРѕ: {{ formatCurrency(store.cart.total_amount) }}</strong>
-        <router-link to="/checkout" class="rounded-xl bg-brand-600 px-4 py-2 text-sm font-bold text-white">РџРµСЂРµР№С‚Рё Рє РѕС„РѕСЂРјР»РµРЅРёСЋ</router-link>
+    <section v-else class="grid gap-5 lg:grid-cols-[1fr_340px]">
+      <div class="space-y-3">
+        <article
+          v-for="item in cartStore.cart.items"
+          :key="item.id"
+          class="brand-card grid gap-4 p-4 sm:grid-cols-[96px_1fr_auto] sm:items-center"
+        >
+          <img
+            :src="fallbackImage(item.product_id)"
+            :alt="item.title"
+            class="h-24 w-24 rounded-xl object-cover"
+            loading="lazy"
+          />
+
+          <div>
+            <h3 class="text-2xl font-bold text-primary-dark">{{ item.title }}</h3>
+            <p class="text-[1.04rem] text-muted">{{ item.qty }} x {{ formatCurrency(item.price) }}</p>
+            <p class="text-[1.02rem] text-muted">Продавец #{{ item.seller_id }}</p>
+          </div>
+
+          <div class="flex flex-col items-end gap-2">
+            <strong class="text-2xl text-primary-dark">{{ formatCurrency(Number(item.price) * item.qty) }}</strong>
+            <UiButton variant="danger" @click="removeItem(item.id)">Удалить</UiButton>
+          </div>
+        </article>
       </div>
-    </div>
+
+      <aside class="brand-card h-fit space-y-3 p-5">
+        <h3 class="brand-title text-3xl font-bold text-primary-dark">Итоги заказа</h3>
+        <div class="space-y-2 text-[1.08rem] text-muted">
+          <div class="flex items-center justify-between">
+            <span>Товары</span>
+            <span>{{ formatCurrency(cartStore.cart.total_amount) }}</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span>Доставка</span>
+            <span>{{ formatCurrency(deliveryFee) }}</span>
+          </div>
+          <div class="flex items-center justify-between border-t border-brand-100 pt-2 text-primary-dark">
+            <strong>Итого</strong>
+            <strong>{{ formatCurrency(grandTotal) }}</strong>
+          </div>
+        </div>
+
+        <router-link to="/checkout" class="brand-btn flex w-full px-6 py-3 text-center text-[1.12rem]">Оформить заказ</router-link>
+      </aside>
+    </section>
   </section>
 </template>
-
