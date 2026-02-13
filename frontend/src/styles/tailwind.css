@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #fffaf3;
+  --surface: #fff;
+  --text: #2a1f17;
+  --muted: #7a5f4b;
+  --accent: #f97316;
+  --accent-dark: #c2410c;
+  --danger: #b91c1c;
+}
+
+body {
+  @apply bg-canvas text-ink font-body antialiased;
+}
+
+a {
+  @apply text-brand-700 hover:text-brand-800;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
