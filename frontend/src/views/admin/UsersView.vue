@@ -22,7 +22,7 @@ async function load() {
 
 async function toggleBan(user: any) {
   await api.post(`/admin/users/${user.id}/ban?is_banned=${!user.is_banned}`);
-  ui.pushToast("success", user.is_banned ? "Пользователь разблокирован" : "Пользователь заблокирован");
+  ui.pushToast("success", user.is_banned ? "РџРѕР»СЊР·РѕРІР°С‚РµР»СЊ СЂР°Р·Р±Р»РѕРєРёСЂРѕРІР°РЅ" : "РџРѕР»СЊР·РѕРІР°С‚РµР»СЊ Р·Р°Р±Р»РѕРєРёСЂРѕРІР°РЅ");
   load();
 }
 
@@ -31,7 +31,7 @@ onMounted(load);
 
 <template>
   <section>
-    <h1 class="mb-4 font-display text-2xl font-bold">Пользователи</h1>
+    <h1 class="mb-4 font-display text-2xl font-bold">РџРѕР»СЊР·РѕРІР°С‚РµР»Рё</h1>
 
     <UiSkeleton v-if="isLoading" :rows="5" />
 
@@ -41,9 +41,9 @@ onMounted(load);
           <tr>
             <th class="px-3 py-2">ID</th>
             <th class="px-3 py-2">Email</th>
-            <th class="px-3 py-2">Роли</th>
-            <th class="px-3 py-2">Статус</th>
-            <th class="px-3 py-2">Действия</th>
+            <th class="px-3 py-2">Р РѕР»Рё</th>
+            <th class="px-3 py-2">РЎС‚Р°С‚СѓСЃ</th>
+            <th class="px-3 py-2">Р”РµР№СЃС‚РІРёСЏ</th>
           </tr>
         </thead>
         <tbody>
@@ -51,9 +51,9 @@ onMounted(load);
             <td class="px-3 py-2">{{ user.id }}</td>
             <td class="px-3 py-2">{{ user.email }}</td>
             <td class="px-3 py-2">{{ user.roles.map((r: any) => r.name).join(', ') }}</td>
-            <td class="px-3 py-2">{{ user.is_banned ? 'Заблокирован' : 'Активен' }}</td>
+            <td class="px-3 py-2">{{ user.is_banned ? 'Р—Р°Р±Р»РѕРєРёСЂРѕРІР°РЅ' : 'РђРєС‚РёРІРµРЅ' }}</td>
             <td class="px-3 py-2">
-              <UiButton size="sm" variant="secondary" @click="toggleBan(user)">{{ user.is_banned ? "Разбан" : "Бан" }}</UiButton>
+              <UiButton size="sm" variant="secondary" @click="toggleBan(user)">{{ user.is_banned ? "Р Р°Р·Р±Р°РЅ" : "Р‘Р°РЅ" }}</UiButton>
             </td>
           </tr>
         </tbody>
@@ -61,3 +61,4 @@ onMounted(load);
     </div>
   </section>
 </template>
+

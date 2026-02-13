@@ -17,17 +17,17 @@ onMounted(async () => {
 
 <template>
   <section class="space-y-4">
-    <h1 class="font-display text-2xl font-bold">Статистика</h1>
+    <h1 class="font-display text-2xl font-bold">РЎС‚Р°С‚РёСЃС‚РёРєР°</h1>
     <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
-      <UiCard><p class="text-xs text-ink/70">Пользователи</p><p class="text-xl font-bold">{{ stats?.users || 0 }}</p></UiCard>
-      <UiCard><p class="text-xs text-ink/70">Продавцы</p><p class="text-xl font-bold">{{ stats?.sellers || 0 }}</p></UiCard>
-      <UiCard><p class="text-xs text-ink/70">Товары</p><p class="text-xl font-bold">{{ stats?.products || 0 }}</p></UiCard>
-      <UiCard><p class="text-xs text-ink/70">Заказы</p><p class="text-xl font-bold">{{ stats?.orders || 0 }}</p></UiCard>
-      <UiCard><p class="text-xs text-ink/70">Отзывы</p><p class="text-xl font-bold">{{ stats?.reviews || 0 }}</p></UiCard>
+      <UiCard><p class="text-xs text-ink/70">РџРѕР»СЊР·РѕРІР°С‚РµР»Рё</p><p class="text-xl font-bold">{{ stats?.users || 0 }}</p></UiCard>
+      <UiCard><p class="text-xs text-ink/70">РџСЂРѕРґР°РІС†С‹</p><p class="text-xl font-bold">{{ stats?.sellers || 0 }}</p></UiCard>
+      <UiCard><p class="text-xs text-ink/70">РўРѕРІР°СЂС‹</p><p class="text-xl font-bold">{{ stats?.products || 0 }}</p></UiCard>
+      <UiCard><p class="text-xs text-ink/70">Р—Р°РєР°Р·С‹</p><p class="text-xl font-bold">{{ stats?.orders || 0 }}</p></UiCard>
+      <UiCard><p class="text-xs text-ink/70">РћС‚Р·С‹РІС‹</p><p class="text-xl font-bold">{{ stats?.reviews || 0 }}</p></UiCard>
     </div>
 
     <UiCard>
-      <h2 class="mb-2 font-display text-lg font-bold">Тренд заказов по дням</h2>
+      <h2 class="mb-2 font-display text-lg font-bold">РўСЂРµРЅРґ Р·Р°РєР°Р·РѕРІ РїРѕ РґРЅСЏРј</h2>
       <div class="space-y-2">
         <div v-for="row in trend" :key="row.day" class="flex items-center gap-3 text-sm">
           <span class="w-28">{{ row.day }}</span>
@@ -38,3 +38,4 @@ onMounted(async () => {
     </UiCard>
   </section>
 </template>
+

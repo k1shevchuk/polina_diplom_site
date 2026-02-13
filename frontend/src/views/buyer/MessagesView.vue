@@ -32,29 +32,30 @@ async function send() {
 <template>
   <section class="grid gap-3 md:grid-cols-[280px_1fr]">
     <aside class="rounded-2xl border border-brand-200 p-3">
-      <h2 class="mb-2 font-display text-lg font-bold">Диалоги</h2>
+      <h2 class="mb-2 font-display text-lg font-bold">Р”РёР°Р»РѕРіРё</h2>
       <button
         v-for="conversation in store.conversations"
         :key="conversation.id"
         class="mb-2 w-full rounded-xl border px-3 py-2 text-left text-sm"
         @click="store.fetchMessages(conversation.id)"
       >
-        Диалог #{{ conversation.id }}
+        Р”РёР°Р»РѕРі #{{ conversation.id }}
       </button>
-      <p v-if="store.conversations.length === 0" class="text-sm text-ink/70">Нет сообщений</p>
+      <p v-if="store.conversations.length === 0" class="text-sm text-ink/70">РќРµС‚ СЃРѕРѕР±С‰РµРЅРёР№</p>
     </aside>
 
     <div class="rounded-2xl border border-brand-200 p-3">
-      <h2 class="mb-2 font-display text-lg font-bold">Сообщения</h2>
+      <h2 class="mb-2 font-display text-lg font-bold">РЎРѕРѕР±С‰РµРЅРёСЏ</h2>
       <div class="mb-3 max-h-80 space-y-2 overflow-y-auto">
         <div v-for="message in store.messages" :key="message.id" class="rounded-xl bg-brand-50 px-3 py-2 text-sm">
           {{ message.body }}
         </div>
       </div>
       <div class="flex gap-2">
-        <UiInput v-model="draft" aria-label="Текст сообщения" placeholder="Написать сообщение" />
-        <UiButton @click="send">Отправить</UiButton>
+        <UiInput v-model="draft" aria-label="РўРµРєСЃС‚ СЃРѕРѕР±С‰РµРЅРёСЏ" placeholder="РќР°РїРёСЃР°С‚СЊ СЃРѕРѕР±С‰РµРЅРёРµ" />
+        <UiButton @click="send">РћС‚РїСЂР°РІРёС‚СЊ</UiButton>
       </div>
     </div>
   </section>
 </template>
+

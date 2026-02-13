@@ -15,8 +15,8 @@ async function load() {
 }
 
 async function moderate(id: number, approve: boolean) {
-  await api.post(`/admin/products/${id}/moderate`, { approve, reason: approve ? null : "Не соответствует правилам" });
-  ui.pushToast("success", approve ? "Товар одобрен" : "Товар отклонён");
+  await api.post(`/admin/products/${id}/moderate`, { approve, reason: approve ? null : "РќРµ СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓРµС‚ РїСЂР°РІРёР»Р°Рј" });
+  ui.pushToast("success", approve ? "РўРѕРІР°СЂ РѕРґРѕР±СЂРµРЅ" : "РўРѕРІР°СЂ РѕС‚РєР»РѕРЅС‘РЅ");
   load();
 }
 
@@ -25,19 +25,20 @@ onMounted(load);
 
 <template>
   <section>
-    <h1 class="mb-4 font-display text-2xl font-bold">Модерация товаров</h1>
-    <div v-if="products.length === 0" class="rounded-2xl border border-dashed border-brand-300 p-6 text-center">Очередь пуста</div>
+    <h1 class="mb-4 font-display text-2xl font-bold">РњРѕРґРµСЂР°С†РёСЏ С‚РѕРІР°СЂРѕРІ</h1>
+    <div v-if="products.length === 0" class="rounded-2xl border border-dashed border-brand-300 p-6 text-center">РћС‡РµСЂРµРґСЊ РїСѓСЃС‚Р°</div>
     <div v-else class="space-y-3">
       <UiCard v-for="item in products" :key="item.id" class="flex items-center justify-between gap-3">
         <div>
           <h3 class="font-semibold">{{ item.title }}</h3>
-          <p class="text-sm text-ink/70">Продавец #{{ item.seller_id }}</p>
+          <p class="text-sm text-ink/70">РџСЂРѕРґР°РІРµС† #{{ item.seller_id }}</p>
         </div>
         <div class="flex gap-2">
-          <UiButton variant="secondary" @click="moderate(item.id, true)">Одобрить</UiButton>
-          <UiButton variant="danger" @click="moderate(item.id, false)">Отклонить</UiButton>
+          <UiButton variant="secondary" @click="moderate(item.id, true)">РћРґРѕР±СЂРёС‚СЊ</UiButton>
+          <UiButton variant="danger" @click="moderate(item.id, false)">РћС‚РєР»РѕРЅРёС‚СЊ</UiButton>
         </div>
       </UiCard>
     </div>
   </section>
 </template>
+

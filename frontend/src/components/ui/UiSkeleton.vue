@@ -11,3 +11,4 @@ defineProps<{ rows?: number }>();
     />
   </div>
 </template>
+

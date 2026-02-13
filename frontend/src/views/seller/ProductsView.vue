@@ -24,17 +24,17 @@ async function load() {
 
 async function submitForModeration(id: number) {
   await api.post(`/seller/products/${id}/submit`);
-  ui.pushToast("success", "Отправлено на модерацию");
+  ui.pushToast("success", "РћС‚РїСЂР°РІР»РµРЅРѕ РЅР° РјРѕРґРµСЂР°С†РёСЋ");
   load();
 }
 
 function removeProduct(id: number) {
   ui.askConfirm({
-    title: "Архивировать товар",
-    message: "Товар будет скрыт из каталога",
+    title: "РђСЂС…РёРІРёСЂРѕРІР°С‚СЊ С‚РѕРІР°СЂ",
+    message: "РўРѕРІР°СЂ Р±СѓРґРµС‚ СЃРєСЂС‹С‚ РёР· РєР°С‚Р°Р»РѕРіР°",
     onConfirm: async () => {
       await api.delete(`/seller/products/${id}`);
-      ui.pushToast("success", "Товар архивирован");
+      ui.pushToast("success", "РўРѕРІР°СЂ Р°СЂС…РёРІРёСЂРѕРІР°РЅ");
       load();
     },
   });
@@ -46,8 +46,8 @@ onMounted(load);
 <template>
   <section>
     <div class="mb-4 flex items-center justify-between">
-      <h1 class="font-display text-2xl font-bold">Мои товары</h1>
-      <router-link to="/seller/products/new" class="rounded-xl bg-brand-600 px-4 py-2 text-sm font-bold text-white">Новый товар</router-link>
+      <h1 class="font-display text-2xl font-bold">РњРѕРё С‚РѕРІР°СЂС‹</h1>
+      <router-link to="/seller/products/new" class="rounded-xl bg-brand-600 px-4 py-2 text-sm font-bold text-white">РќРѕРІС‹Р№ С‚РѕРІР°СЂ</router-link>
     </div>
 
     <div v-if="isLoading" class="space-y-2">
@@ -56,7 +56,7 @@ onMounted(load);
     </div>
 
     <div v-else-if="products.length === 0" class="rounded-2xl border border-dashed border-brand-300 p-6 text-center">
-      Нет товаров. <router-link to="/seller/products/new">Добавить первый</router-link>
+      РќРµС‚ С‚РѕРІР°СЂРѕРІ. <router-link to="/seller/products/new">Р”РѕР±Р°РІРёС‚СЊ РїРµСЂРІС‹Р№</router-link>
     </div>
 
     <div v-else class="space-y-3">
@@ -66,13 +66,14 @@ onMounted(load);
           <UiBadge>{{ item.status }}</UiBadge>
         </div>
         <div class="flex flex-wrap gap-2">
-          <router-link :to="`/seller/products/${item.id}/edit`" class="rounded-lg bg-brand-100 px-3 py-1 text-sm">Редактировать</router-link>
+          <router-link :to="`/seller/products/${item.id}/edit`" class="rounded-lg bg-brand-100 px-3 py-1 text-sm">Р РµРґР°РєС‚РёСЂРѕРІР°С‚СЊ</router-link>
           <UiButton v-if="item.status === 'DRAFT' || item.status === 'REJECTED'" variant="secondary" @click="submitForModeration(item.id)">
-            На модерацию
+            РќР° РјРѕРґРµСЂР°С†РёСЋ
           </UiButton>
-          <UiButton variant="danger" @click="removeProduct(item.id)">Архив</UiButton>
+          <UiButton variant="danger" @click="removeProduct(item.id)">РђСЂС…РёРІ</UiButton>
         </div>
       </UiCard>
     </div>
   </section>
 </template>
+

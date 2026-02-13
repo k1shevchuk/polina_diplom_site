@@ -18,3 +18,4 @@ export function usePolling(callback: () => void | Promise<void>, intervalMs: num
     }
   });
 }
+

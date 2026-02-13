@@ -3,14 +3,16 @@ import { createPinia, setActivePinia } from "pinia";
 
 import { useNotificationsStore } from "./store";
 
-const postMock = vi.fn(async () => ({ data: {} }));
+const { postMock } = vi.hoisted(() => ({
+  postMock: vi.fn(async () => ({ data: {} })),
+}));
 
 vi.mock("../../shared/api/client", () => ({
   api: {
     get: vi.fn(async () => ({
       data: [{ id: 1, user_id: 1, type: "NEW_ORDER", payload_json: {}, is_read: false, created_at: "2026-01-01" }],
     })),
-    post: (...args: any[]) => postMock(...args),
+    post: postMock,
   },
 }));
 
@@ -37,3 +39,4 @@ describe("notifications store", () => {
     expect(store.items[0].is_read).toBe(false);
   });
 });
+

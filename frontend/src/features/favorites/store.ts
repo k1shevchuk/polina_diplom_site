@@ -24,3 +24,4 @@ export const useFavoritesStore = defineStore("favorites", () => {
 
   return { items, fetchFavorites, toggleFavorite };
 });
+

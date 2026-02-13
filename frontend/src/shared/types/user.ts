@@ -6,3 +6,4 @@ export interface UserPublic {
   roles: Array<{ id: number; name: "BUYER" | "SELLER" | "ADMIN" }>;
   created_at: string;
 }
+

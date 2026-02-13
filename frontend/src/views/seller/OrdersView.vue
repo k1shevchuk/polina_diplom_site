@@ -14,14 +14,14 @@ onMounted(() => {
 
 <template>
   <section>
-    <h1 class="mb-4 font-display text-2xl font-bold">Заказы продавца</h1>
+    <h1 class="mb-4 font-display text-2xl font-bold">Р—Р°РєР°Р·С‹ РїСЂРѕРґР°РІС†Р°</h1>
     <div v-if="store.sellerOrders.length === 0" class="rounded-2xl border border-dashed border-brand-300 p-6 text-center">
-      Заказов пока нет
+      Р—Р°РєР°Р·РѕРІ РїРѕРєР° РЅРµС‚
     </div>
     <div v-else class="space-y-3">
       <UiCard v-for="order in store.sellerOrders" :key="order.id" class="flex items-center justify-between">
         <div>
-          <p class="font-semibold">Заказ #{{ order.id }}</p>
+          <p class="font-semibold">Р—Р°РєР°Р· #{{ order.id }}</p>
           <p class="text-sm">{{ formatCurrency(order.total_amount) }}</p>
         </div>
         <UiBadge>{{ order.status }}</UiBadge>
@@ -29,3 +29,4 @@ onMounted(() => {
     </div>
   </section>
 </template>
+

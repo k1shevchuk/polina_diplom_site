@@ -15,22 +15,24 @@ const router = useRouter();
 async function submit() {
   try {
     await auth.login(form.email, form.password);
-    ui.pushToast("success", "Вход выполнен");
+    ui.pushToast("success", "Р’С…РѕРґ РІС‹РїРѕР»РЅРµРЅ");
     router.push("/");
-  } catch (error) {
-    ui.pushToast("error", "Не удалось войти");
+  } catch {
+    ui.pushToast("error", "РќРµ СѓРґР°Р»РѕСЃСЊ РІРѕР№С‚Рё");
   }
 }
 </script>
 
 <template>
   <section class="mx-auto max-w-md rounded-2xl bg-white p-6 shadow-soft">
-    <h1 class="font-display text-2xl font-bold">Вход</h1>
+    <h1 class="font-display text-2xl font-bold">Р’С…РѕРґ</h1>
     <form class="mt-4 space-y-3" @submit.prevent="submit">
       <UiInput v-model="form.email" type="email" label="Email" aria-label="Email" />
-      <UiInput v-model="form.password" type="password" label="Пароль" aria-label="Пароль" />
-      <UiButton type="submit" class="w-full" :disabled="auth.isLoading">Войти</UiButton>
+      <UiInput v-model="form.password" type="password" label="РџР°СЂРѕР»СЊ" aria-label="РџР°СЂРѕР»СЊ" />
+      <UiButton type="submit" class="w-full" :disabled="auth.isLoading">Р’РѕР№С‚Рё</UiButton>
     </form>
-    <p class="mt-3 text-sm">Нет аккаунта? <router-link to="/auth/register">Регистрация</router-link></p>
+    <p class="mt-3 text-sm">РќРµС‚ Р°РєРєР°СѓРЅС‚Р°? <router-link to="/auth/register">Р РµРіРёСЃС‚СЂР°С†РёСЏ</router-link></p>
   </section>
 </template>
+
+

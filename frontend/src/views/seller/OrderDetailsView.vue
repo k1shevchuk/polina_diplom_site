@@ -1,6 +1,7 @@
 <template>
   <section>
-    <h1 class="font-display text-2xl font-bold">Детали заказа продавца</h1>
-    <p class="text-sm text-ink/70">Просмотр состава и смена статуса заказа.</p>
+    <h1 class="font-display text-2xl font-bold">Р”РµС‚Р°Р»Рё Р·Р°РєР°Р·Р° РїСЂРѕРґР°РІС†Р°</h1>
+    <p class="text-sm text-ink/70">РџСЂРѕСЃРјРѕС‚СЂ СЃРѕСЃС‚Р°РІР° Рё СЃРјРµРЅР° СЃС‚Р°С‚СѓСЃР° Р·Р°РєР°Р·Р°.</p>
   </section>
 </template>
+

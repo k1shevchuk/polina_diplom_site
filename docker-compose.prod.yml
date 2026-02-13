@@ -46,7 +46,7 @@ services:
       - .env
     environment:
       VITE_API_BASE_URL: /api/v1
-    command: sh -c "npm ci && npm run build"
+    command: sh -c "npm install && npm run build"
 
   nginx:
     image: nginx:1.27-alpine

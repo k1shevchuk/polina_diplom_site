@@ -8,3 +8,4 @@
 import UiConfirmDialog from "./components/ui/UiConfirmDialog.vue";
 import UiToast from "./components/ui/UiToast.vue";
 </script>
+

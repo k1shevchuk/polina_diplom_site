@@ -1,6 +1,7 @@
 <template>
   <section>
-    <h1 class="font-display text-2xl font-bold">Уведомления продавца</h1>
-    <router-link to="/notifications" class="text-sm">Открыть уведомления</router-link>
+    <h1 class="font-display text-2xl font-bold">РЈРІРµРґРѕРјР»РµРЅРёСЏ РїСЂРѕРґР°РІС†Р°</h1>
+    <router-link to="/notifications" class="text-sm">РћС‚РєСЂС‹С‚СЊ СѓРІРµРґРѕРјР»РµРЅРёСЏ</router-link>
   </section>
 </template>
+

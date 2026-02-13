@@ -43,3 +43,4 @@ export const useUiStore = defineStore("ui", () => {
     closeConfirm,
   };
 });
+

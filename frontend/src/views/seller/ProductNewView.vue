@@ -30,23 +30,24 @@ async function saveDraft() {
     materials: form.materials.split(",").map((x) => x.trim()).filter(Boolean),
     image_urls: form.image_urls.split(",").map((x) => x.trim()).filter(Boolean),
   });
-  ui.pushToast("success", "Черновик сохранён");
+  ui.pushToast("success", "Р§РµСЂРЅРѕРІРёРє СЃРѕС…СЂР°РЅС‘РЅ");
   router.push("/seller/products");
 }
 </script>
 
 <template>
   <section>
-    <h1 class="mb-4 font-display text-2xl font-bold">Новый товар</h1>
+    <h1 class="mb-4 font-display text-2xl font-bold">РќРѕРІС‹Р№ С‚РѕРІР°СЂ</h1>
     <form class="space-y-3" @submit.prevent="saveDraft">
-      <UiInput v-model="form.title" label="Название" />
-      <UiInput v-model="form.description" label="Описание" />
-      <UiInput v-model="form.price" type="number" label="Цена" />
-      <UiInput v-model="form.stock" type="number" label="Остаток" />
-      <UiInput v-model="form.tags" label="Теги (через запятую)" />
-      <UiInput v-model="form.materials" label="Материалы (через запятую)" />
-      <UiInput v-model="form.image_urls" label="URL фото (через запятую)" />
-      <UiButton type="submit">Сохранить черновик</UiButton>
+      <UiInput v-model="form.title" label="РќР°Р·РІР°РЅРёРµ" />
+      <UiInput v-model="form.description" label="РћРїРёСЃР°РЅРёРµ" />
+      <UiInput v-model="form.price" type="number" label="Р¦РµРЅР°" />
+      <UiInput v-model="form.stock" type="number" label="РћСЃС‚Р°С‚РѕРє" />
+      <UiInput v-model="form.tags" label="РўРµРіРё (С‡РµСЂРµР· Р·Р°РїСЏС‚СѓСЋ)" />
+      <UiInput v-model="form.materials" label="РњР°С‚РµСЂРёР°Р»С‹ (С‡РµСЂРµР· Р·Р°РїСЏС‚СѓСЋ)" />
+      <UiInput v-model="form.image_urls" label="URL С„РѕС‚Рѕ (С‡РµСЂРµР· Р·Р°РїСЏС‚СѓСЋ)" />
+      <UiButton type="submit">РЎРѕС…СЂР°РЅРёС‚СЊ С‡РµСЂРЅРѕРІРёРє</UiButton>
     </form>
   </section>
 </template>
+

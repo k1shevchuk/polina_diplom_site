@@ -1,6 +1,7 @@
 <template>
   <section class="rounded-2xl bg-white p-6 shadow-soft">
-    <h1 class="font-display text-2xl font-bold">Профиль продавца</h1>
-    <p class="mt-2 text-sm text-ink/70">Публичная страница продавца с товарами и рейтингом.</p>
+    <h1 class="font-display text-2xl font-bold">РџСЂРѕС„РёР»СЊ РїСЂРѕРґР°РІС†Р°</h1>
+    <p class="mt-2 text-sm text-ink/70">РџСѓР±Р»РёС‡РЅР°СЏ СЃС‚СЂР°РЅРёС†Р° РїСЂРѕРґР°РІС†Р° СЃ С‚РѕРІР°СЂР°РјРё Рё СЂРµР№С‚РёРЅРіРѕРј.</p>
   </section>
 </template>
+

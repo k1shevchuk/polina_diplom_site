@@ -43,3 +43,4 @@ export interface CheckoutResponse {
   orders: Order[];
   total_orders: number;
 }
+

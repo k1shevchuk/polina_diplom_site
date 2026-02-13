@@ -28,3 +28,4 @@ describe("catalog utils", () => {
     vi.useRealTimers();
   });
 });
+

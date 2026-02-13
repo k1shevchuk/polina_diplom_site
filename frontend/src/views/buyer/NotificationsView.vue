@@ -21,12 +21,12 @@ usePolling(async () => {
 <template>
   <section>
     <div class="mb-4 flex items-center justify-between">
-      <h1 class="font-display text-2xl font-bold">Уведомления</h1>
-      <p class="text-sm">Непрочитано: {{ store.unreadCount }}</p>
+      <h1 class="font-display text-2xl font-bold">РЈРІРµРґРѕРјР»РµРЅРёСЏ</h1>
+      <p class="text-sm">РќРµРїСЂРѕС‡РёС‚Р°РЅРѕ: {{ store.unreadCount }}</p>
     </div>
 
     <div v-if="store.items.length === 0" class="rounded-2xl border border-dashed border-brand-300 p-6 text-center">
-      Нет уведомлений
+      РќРµС‚ СѓРІРµРґРѕРјР»РµРЅРёР№
     </div>
 
     <div v-else class="space-y-3">
@@ -35,8 +35,9 @@ usePolling(async () => {
           <p class="font-semibold">{{ item.type }}</p>
           <p class="text-xs text-ink/70">{{ formatDate(item.created_at) }}</p>
         </div>
-        <UiButton v-if="!item.is_read" variant="secondary" @click="store.markAsRead(item.id)">Прочитано</UiButton>
+        <UiButton v-if="!item.is_read" variant="secondary" @click="store.markAsRead(item.id)">РџСЂРѕС‡РёС‚Р°РЅРѕ</UiButton>
       </UiCard>
     </div>
   </section>
 </template>
+

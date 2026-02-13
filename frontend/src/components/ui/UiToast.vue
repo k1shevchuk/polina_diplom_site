@@ -24,3 +24,4 @@ function toastColor(type: "success" | "error" | "info") {
     </div>
   </div>
 </template>
+

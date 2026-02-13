@@ -35,3 +35,4 @@ export const useMessagesStore = defineStore("messages", () => {
     sendMessage,
   };
 });
+

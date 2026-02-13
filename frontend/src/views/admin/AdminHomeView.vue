@@ -1,6 +1,7 @@
 <template>
   <section class="space-y-3">
-    <h1 class="font-display text-2xl font-bold">Админ-панель</h1>
-    <p class="text-sm text-ink/70">Управление пользователями, товарами, отзывами и статистикой.</p>
+    <h1 class="font-display text-2xl font-bold">РђРґРјРёРЅ-РїР°РЅРµР»СЊ</h1>
+    <p class="text-sm text-ink/70">РЈРїСЂР°РІР»РµРЅРёРµ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏРјРё, С‚РѕРІР°СЂР°РјРё, РѕС‚Р·С‹РІР°РјРё Рё СЃС‚Р°С‚РёСЃС‚РёРєРѕР№.</p>
   </section>
 </template>
+

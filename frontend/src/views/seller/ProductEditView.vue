@@ -20,20 +20,21 @@ async function save() {
     price: Number(form.price),
     stock: Number(form.stock),
   });
-  ui.pushToast("success", "Товар обновлён");
+  ui.pushToast("success", "РўРѕРІР°СЂ РѕР±РЅРѕРІР»С‘РЅ");
   router.push("/seller/products");
 }
 </script>
 
 <template>
   <section>
-    <h1 class="mb-4 font-display text-2xl font-bold">Редактирование товара</h1>
+    <h1 class="mb-4 font-display text-2xl font-bold">Р РµРґР°РєС‚РёСЂРѕРІР°РЅРёРµ С‚РѕРІР°СЂР°</h1>
     <form class="space-y-3" @submit.prevent="save">
-      <UiInput v-model="form.title" label="Название" />
-      <UiInput v-model="form.description" label="Описание" />
-      <UiInput v-model="form.price" type="number" label="Цена" />
-      <UiInput v-model="form.stock" type="number" label="Остаток" />
-      <UiButton type="submit">Сохранить</UiButton>
+      <UiInput v-model="form.title" label="РќР°Р·РІР°РЅРёРµ" />
+      <UiInput v-model="form.description" label="РћРїРёСЃР°РЅРёРµ" />
+      <UiInput v-model="form.price" type="number" label="Р¦РµРЅР°" />
+      <UiInput v-model="form.stock" type="number" label="РћСЃС‚Р°С‚РѕРє" />
+      <UiButton type="submit">РЎРѕС…СЂР°РЅРёС‚СЊ</UiButton>
     </form>
   </section>
 </template>
+

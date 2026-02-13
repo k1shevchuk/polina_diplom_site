@@ -2,37 +2,37 @@
 import UiCard from "../../components/ui/UiCard.vue";
 
 const categories = [
-  "Украшения",
-  "Керамика",
-  "Текстиль",
-  "Декор",
-  "Игрушки",
-  "Аксессуары",
+  "РЈРєСЂР°С€РµРЅРёСЏ",
+  "РљРµСЂР°РјРёРєР°",
+  "РўРµРєСЃС‚РёР»СЊ",
+  "Р”РµРєРѕСЂ",
+  "РРіСЂСѓС€РєРё",
+  "РђРєСЃРµСЃСЃСѓР°СЂС‹",
 ];
 
 const picks = [
-  { title: "Новые поступления", subtitle: "Свежие работы мастеров" },
-  { title: "Популярное", subtitle: "Товары с высоким спросом" },
+  { title: "РќРѕРІС‹Рµ РїРѕСЃС‚СѓРїР»РµРЅРёСЏ", subtitle: "РЎРІРµР¶РёРµ СЂР°Р±РѕС‚С‹ РјР°СЃС‚РµСЂРѕРІ" },
+  { title: "РџРѕРїСѓР»СЏСЂРЅРѕРµ", subtitle: "РўРѕРІР°СЂС‹ СЃ РІС‹СЃРѕРєРёРј СЃРїСЂРѕСЃРѕРј" },
 ];
 </script>
 
 <template>
   <section class="space-y-8">
     <div class="rounded-3xl bg-gradient-to-r from-brand-700 to-brand-500 p-8 text-white shadow-soft">
-      <h1 class="font-display text-3xl font-extrabold">Маркетплейс изделий ручной работы</h1>
+      <h1 class="font-display text-3xl font-extrabold">РњР°СЂРєРµС‚РїР»РµР№СЃ РёР·РґРµР»РёР№ СЂСѓС‡РЅРѕР№ СЂР°Р±РѕС‚С‹</h1>
       <p class="mt-3 max-w-2xl text-sm md:text-base">
-        Находите уникальные вещи от независимых мастеров и оформляйте заказ без сложных шагов.
+        РќР°С…РѕРґРёС‚Рµ СѓРЅРёРєР°Р»СЊРЅС‹Рµ РІРµС‰Рё РѕС‚ РЅРµР·Р°РІРёСЃРёРјС‹С… РјР°СЃС‚РµСЂРѕРІ Рё РѕС„РѕСЂРјР»СЏР№С‚Рµ Р·Р°РєР°Р· Р±РµР· СЃР»РѕР¶РЅС‹С… С€Р°РіРѕРІ.
       </p>
       <router-link
         to="/catalog"
         class="mt-5 inline-flex rounded-xl bg-white px-4 py-2 text-sm font-bold text-brand-700"
       >
-        Перейти в каталог
+        РџРµСЂРµР№С‚Рё РІ РєР°С‚Р°Р»РѕРі
       </router-link>
     </div>
 
     <div>
-      <h2 class="mb-4 font-display text-2xl font-bold">Категории</h2>
+      <h2 class="mb-4 font-display text-2xl font-bold">РљР°С‚РµРіРѕСЂРёРё</h2>
       <div class="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-6">
         <UiCard v-for="item in categories" :key="item">
           <p class="text-sm font-bold">{{ item }}</p>
@@ -41,7 +41,7 @@ const picks = [
     </div>
 
     <div>
-      <h2 class="mb-4 font-display text-2xl font-bold">Подборки</h2>
+      <h2 class="mb-4 font-display text-2xl font-bold">РџРѕРґР±РѕСЂРєРё</h2>
       <div class="grid gap-4 md:grid-cols-2">
         <UiCard v-for="pick in picks" :key="pick.title">
           <h3 class="font-display text-xl font-bold">{{ pick.title }}</h3>
@@ -51,3 +51,4 @@ const picks = [
     </div>
   </section>
 </template>
+

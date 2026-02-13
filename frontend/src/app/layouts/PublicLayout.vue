@@ -10,12 +10,12 @@ const auth = useAuthStore();
       <div class="mx-auto flex w-full max-w-7xl items-center justify-between px-4 py-3 md:px-6">
         <router-link to="/" class="font-display text-xl font-extrabold text-brand-800">Handmade Market</router-link>
         <nav class="flex items-center gap-4 text-sm font-semibold">
-          <router-link to="/catalog">Каталог</router-link>
-          <router-link to="/favorites">Избранное</router-link>
-          <router-link to="/cart">Корзина</router-link>
-          <router-link to="/messages">Сообщения</router-link>
-          <router-link to="/me">Профиль</router-link>
-          <router-link v-if="!auth.isAuthenticated" to="/auth/login">Войти</router-link>
+          <router-link to="/catalog">РљР°С‚Р°Р»РѕРі</router-link>
+          <router-link to="/favorites">РР·Р±СЂР°РЅРЅРѕРµ</router-link>
+          <router-link to="/cart">РљРѕСЂР·РёРЅР°</router-link>
+          <router-link to="/messages">РЎРѕРѕР±С‰РµРЅРёСЏ</router-link>
+          <router-link to="/me">РџСЂРѕС„РёР»СЊ</router-link>
+          <router-link v-if="!auth.isAuthenticated" to="/auth/login">Р’РѕР№С‚Рё</router-link>
         </nav>
       </div>
     </header>
@@ -25,3 +25,4 @@ const auth = useAuthStore();
     </main>
   </div>
 </template>
+

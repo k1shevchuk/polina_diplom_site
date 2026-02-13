@@ -80,3 +80,4 @@ export const useAuthStore = defineStore("auth", () => {
     toggleSeller,
   };
 });
+

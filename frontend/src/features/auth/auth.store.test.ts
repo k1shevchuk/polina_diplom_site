@@ -41,3 +41,4 @@ describe("auth store", () => {
     expect(store.token).toBe("token456");
   });
 });
+

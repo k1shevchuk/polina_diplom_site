@@ -40,3 +40,4 @@ export async function authGuard(to: RouteLocationNormalized, _from: RouteLocatio
 
   next();
 }
+

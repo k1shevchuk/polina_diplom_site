@@ -21,3 +21,4 @@ export const endpoints = {
   },
   notifications: "/notifications",
 };
+

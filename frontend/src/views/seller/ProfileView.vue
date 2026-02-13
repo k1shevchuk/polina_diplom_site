@@ -1,6 +1,7 @@
 <template>
   <section>
-    <h1 class="font-display text-2xl font-bold">Профиль продавца</h1>
-    <p class="text-sm text-ink/70">Настройки витрины и информации о мастере.</p>
+    <h1 class="font-display text-2xl font-bold">РџСЂРѕС„РёР»СЊ РїСЂРѕРґР°РІС†Р°</h1>
+    <p class="text-sm text-ink/70">РќР°СЃС‚СЂРѕР№РєРё РІРёС‚СЂРёРЅС‹ Рё РёРЅС„РѕСЂРјР°С†РёРё Рѕ РјР°СЃС‚РµСЂРµ.</p>
   </section>
 </template>
+

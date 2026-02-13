@@ -23,3 +23,4 @@ export const useCatalogStore = defineStore("catalog", () => {
 
   return { products, total, isLoading, fetchCatalog };
 });
+

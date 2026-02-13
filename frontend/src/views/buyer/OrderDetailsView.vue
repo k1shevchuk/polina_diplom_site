@@ -1,6 +1,7 @@
 <template>
   <section class="space-y-3">
-    <h1 class="font-display text-2xl font-bold">Детали заказа</h1>
-    <p class="text-sm text-ink/70">Страница детализации заказа покупателя.</p>
+    <h1 class="font-display text-2xl font-bold">Р”РµС‚Р°Р»Рё Р·Р°РєР°Р·Р°</h1>
+    <p class="text-sm text-ink/70">РЎС‚СЂР°РЅРёС†Р° РґРµС‚Р°Р»РёР·Р°С†РёРё Р·Р°РєР°Р·Р° РїРѕРєСѓРїР°С‚РµР»СЏ.</p>
   </section>
 </template>
+

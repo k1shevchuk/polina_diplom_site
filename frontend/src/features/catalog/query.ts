@@ -15,3 +15,4 @@ export function buildCatalogQuery(input: CatalogQueryInput): URLSearchParams {
   });
   return params;
 }
+

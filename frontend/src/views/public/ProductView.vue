@@ -57,36 +57,36 @@ function toggleFavorite() {
               :key="index"
               :src="product.images?.[index - 1]?.image_url || 'https://placehold.co/200x150?text=Photo'"
               class="h-20 w-full rounded-xl object-cover"
-              :alt="`Фото ${index}`"
+              :alt="`Р¤РѕС‚Рѕ ${index}`"
             />
           </div>
         </div>
 
         <UiCard>
-          <UiBadge>В наличии</UiBadge>
+          <UiBadge>Р’ РЅР°Р»РёС‡РёРё</UiBadge>
           <h1 class="mt-3 font-display text-3xl font-extrabold">{{ product.title }}</h1>
           <p class="mt-2 text-sm text-ink/75">{{ product.description }}</p>
           <p class="mt-4 text-3xl font-extrabold text-brand-800">{{ formatCurrency(product.price) }}</p>
 
           <div class="mt-5 flex gap-2">
-            <UiButton @click="addToCart">Добавить в корзину</UiButton>
-            <UiButton variant="secondary" @click="toggleFavorite">В избранное</UiButton>
+            <UiButton @click="addToCart">Р”РѕР±Р°РІРёС‚СЊ РІ РєРѕСЂР·РёРЅСѓ</UiButton>
+            <UiButton variant="secondary" @click="toggleFavorite">Р’ РёР·Р±СЂР°РЅРЅРѕРµ</UiButton>
           </div>
 
           <div class="mt-6 rounded-xl bg-brand-50 p-4">
-            <p class="text-sm font-semibold">Продавец #{{ product.seller_id }}</p>
-            <router-link :to="`/seller/${product.seller_id}`" class="text-sm">Открыть профиль продавца</router-link>
+            <p class="text-sm font-semibold">РџСЂРѕРґР°РІРµС† #{{ product.seller_id }}</p>
+            <router-link :to="`/seller/${product.seller_id}`" class="text-sm">РћС‚РєСЂС‹С‚СЊ РїСЂРѕС„РёР»СЊ РїСЂРѕРґР°РІС†Р°</router-link>
           </div>
         </UiCard>
       </div>
 
       <div class="rounded-2xl bg-white p-4 shadow-soft">
-        <h2 class="font-display text-xl font-bold">Похожие товары</h2>
+        <h2 class="font-display text-xl font-bold">РџРѕС…РѕР¶РёРµ С‚РѕРІР°СЂС‹</h2>
         <div class="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           <UiCard v-for="item in related" :key="item.id">
             <h3 class="font-semibold">{{ item.title }}</h3>
             <p class="text-sm text-ink/70">{{ formatCurrency(item.price) }}</p>
-            <router-link :to="`/product/${item.id}`" class="text-xs">Открыть</router-link>
+            <router-link :to="`/product/${item.id}`" class="text-xs">РћС‚РєСЂС‹С‚СЊ</router-link>
           </UiCard>
         </div>
       </div>
@@ -95,16 +95,17 @@ function toggleFavorite() {
         <div class="flex items-center justify-between gap-3">
           <strong>{{ formatCurrency(product.price) }}</strong>
           <div class="flex gap-2">
-            <UiButton variant="secondary" @click="toggleFavorite">Избранное</UiButton>
-            <UiButton @click="addToCart">Купить</UiButton>
+            <UiButton variant="secondary" @click="toggleFavorite">РР·Р±СЂР°РЅРЅРѕРµ</UiButton>
+            <UiButton @click="addToCart">РљСѓРїРёС‚СЊ</UiButton>
           </div>
         </div>
       </div>
     </template>
 
     <div v-else class="rounded-2xl border border-dashed border-brand-300 bg-white p-8 text-center">
-      <h3 class="font-display text-xl font-bold">Товар не найден</h3>
-      <router-link class="mt-2 inline-block text-sm" to="/catalog">Вернуться в каталог</router-link>
+      <h3 class="font-display text-xl font-bold">РўРѕРІР°СЂ РЅРµ РЅР°Р№РґРµРЅ</h3>
+      <router-link class="mt-2 inline-block text-sm" to="/catalog">Р’РµСЂРЅСѓС‚СЊСЃСЏ РІ РєР°С‚Р°Р»РѕРі</router-link>
     </div>
   </section>
 </template>
+

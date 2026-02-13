@@ -22,3 +22,4 @@ export const useCheckoutStore = defineStore("checkout", () => {
 
   return { lastCheckout, isLoading, checkout };
 });
+

@@ -20,20 +20,21 @@ const form = reactive({
 
 async function submit() {
   const result = await checkoutStore.checkout(form);
-  ui.pushToast("success", `Заказ оформлен: ${result.total_orders} шт.`);
+  ui.pushToast("success", `Р—Р°РєР°Р· РѕС„РѕСЂРјР»РµРЅ: ${result.total_orders} С€С‚.`);
   router.push("/orders");
 }
 </script>
 
 <template>
   <section>
-    <h1 class="mb-4 font-display text-2xl font-bold">Оформление заказа</h1>
+    <h1 class="mb-4 font-display text-2xl font-bold">РћС„РѕСЂРјР»РµРЅРёРµ Р·Р°РєР°Р·Р°</h1>
     <form class="space-y-3" @submit.prevent="submit">
-      <UiInput v-model="form.full_name" label="ФИО" />
-      <UiInput v-model="form.phone" label="Телефон" />
-      <UiInput v-model="form.address" label="Адрес" />
-      <UiInput v-model="form.comment" label="Комментарий" />
-      <UiButton type="submit" :disabled="checkoutStore.isLoading">Оформить</UiButton>
+      <UiInput v-model="form.full_name" label="Р¤РРћ" />
+      <UiInput v-model="form.phone" label="РўРµР»РµС„РѕРЅ" />
+      <UiInput v-model="form.address" label="РђРґСЂРµСЃ" />
+      <UiInput v-model="form.comment" label="РљРѕРјРјРµРЅС‚Р°СЂРёР№" />
+      <UiButton type="submit" :disabled="checkoutStore.isLoading">РћС„РѕСЂРјРёС‚СЊ</UiButton>
     </form>
   </section>
 </template>
+

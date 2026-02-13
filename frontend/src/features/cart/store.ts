@@ -31,3 +31,4 @@ export const useCartStore = defineStore("cart", () => {
 
   return { cart, isLoading, fetchCart, addItem, removeItem };
 });
+

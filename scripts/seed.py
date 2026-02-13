@@ -50,33 +50,33 @@ def run_seed() -> None:
         db.add_all([admin, seller, buyer])
         db.flush()
 
-        db.add(SellerProfile(user_id=seller.id, display_name="Мастер Лиза", bio="Делаю керамику и текстиль"))
+        db.add(SellerProfile(user_id=seller.id, display_name="пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ", bio="пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ"))
 
-        cat_ceramic = Category(name="Керамика", slug="ceramic")
-        cat_textile = Category(name="Текстиль", slug="textile")
+        cat_ceramic = Category(name="пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", slug="ceramic")
+        cat_textile = Category(name="пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", slug="textile")
         db.add_all([cat_ceramic, cat_textile])
         db.flush()
 
         p_active = Product(
             seller_id=seller.id,
-            title="Керамическая ваза",
-            description="Ручная работа, матовая глазурь.",
+            title="пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ",
+            description="пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ.",
             price=Decimal("2500.00"),
             stock=5,
             category_id=cat_ceramic.id,
-            tags=["ваза", "керамика"],
-            materials=["глина"],
+            tags=["пїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ"],
+            materials=["пїЅпїЅпїЅпїЅпїЅ"],
             status=ProductStatus.ACTIVE,
         )
         p_pending = Product(
             seller_id=seller.id,
-            title="Плед из шерсти",
-            description="Теплый плед ручной вязки.",
+            title="пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ",
+            description="пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ.",
             price=Decimal("3400.00"),
             stock=3,
             category_id=cat_textile.id,
-            tags=["плед"],
-            materials=["шерсть"],
+            tags=["пїЅпїЅпїЅпїЅ"],
+            materials=["пїЅпїЅпїЅпїЅпїЅпїЅ"],
             status=ProductStatus.PENDING,
         )
         db.add_all([p_active, p_pending])
@@ -93,10 +93,10 @@ def run_seed() -> None:
             buyer_id=buyer.id,
             seller_id=seller.id,
             status=OrderStatus.ACCEPTED,
-            full_name="Иван Иванов",
+            full_name="пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ",
             phone="+79990000000",
-            address="Москва, ул. Пример, 1",
-            comment="Позвоните за час",
+            address="пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅ, 1",
+            comment="пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅ",
             total_amount=Decimal("2500.00"),
         )
         db.add(order)
@@ -113,7 +113,7 @@ def run_seed() -> None:
         db.add(order_item)
         db.flush()
 
-        db.add(Review(user_id=buyer.id, product_id=p_active.id, order_item_id=order_item.id, rating=5, text="Очень красиво!"))
+        db.add(Review(user_id=buyer.id, product_id=p_active.id, order_item_id=order_item.id, rating=5, text="пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ!"))
 
         conv = Conversation(buyer_id=buyer.id, seller_id=seller.id, product_id=p_active.id)
         db.add(conv)
@@ -121,8 +121,8 @@ def run_seed() -> None:
 
         db.add_all(
             [
-                Message(conversation_id=conv.id, sender_id=buyer.id, body="Здравствуйте, когда отправка?", is_read=False),
-                Message(conversation_id=conv.id, sender_id=seller.id, body="Добрый день, завтра утром.", is_read=True),
+                Message(conversation_id=conv.id, sender_id=buyer.id, body="пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ?", is_read=False),
+                Message(conversation_id=conv.id, sender_id=seller.id, body="пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ.", is_read=True),
             ]
         )
 

@@ -17,3 +17,4 @@ const emit = defineEmits<{ (e: "update:modelValue", value: string): void }>();
     <option v-for="option in options" :key="option.value" :value="option.value">{{ option.label }}</option>
   </select>
 </template>
+

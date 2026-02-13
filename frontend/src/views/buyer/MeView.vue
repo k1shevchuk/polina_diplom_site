@@ -8,16 +8,17 @@ const ui = useUiStore();
 
 async function becomeSeller() {
   await auth.toggleSeller(true);
-  ui.pushToast("success", "Роль продавца включена");
+  ui.pushToast("success", "Р РѕР»СЊ РїСЂРѕРґР°РІС†Р° РІРєР»СЋС‡РµРЅР°");
 }
 </script>
 
 <template>
   <section class="space-y-3">
-    <h1 class="font-display text-2xl font-bold">Мой профиль</h1>
-    <p class="text-sm">Email: {{ auth.me?.email || '—' }}</p>
-    <p class="text-sm">Роли: {{ auth.me?.roles.join(', ') || '—' }}</p>
-    <UiButton @click="becomeSeller">Стать продавцом</UiButton>
-    <UiButton variant="ghost" @click="auth.logout">Выйти</UiButton>
+    <h1 class="font-display text-2xl font-bold">РњРѕР№ РїСЂРѕС„РёР»СЊ</h1>
+    <p class="text-sm">Email: {{ auth.me?.email || 'вЂ”' }}</p>
+    <p class="text-sm">Р РѕР»Рё: {{ auth.me?.roles.join(', ') || 'вЂ”' }}</p>
+    <UiButton @click="becomeSeller">РЎС‚Р°С‚СЊ РїСЂРѕРґР°РІС†РѕРј</UiButton>
+    <UiButton variant="ghost" @click="auth.logout">Р’С‹Р№С‚Рё</UiButton>
   </section>
 </template>
+

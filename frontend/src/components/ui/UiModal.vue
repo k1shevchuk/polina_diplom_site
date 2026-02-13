@@ -9,10 +9,11 @@ const emit = defineEmits<{ (e: "close"): void }>();
       <div class="w-full max-w-lg rounded-2xl bg-white p-6 shadow-soft">
         <div class="mb-4 flex items-center justify-between">
           <h3 class="font-display text-lg font-bold">{{ title }}</h3>
-          <button aria-label="Çàêğûòü" class="rounded p-1 text-xl" @click="emit('close')">&times;</button>
+          <button aria-label="Ğ—Ğ°ĞºÑ€Ñ‹Ñ‚ÑŒ" class="rounded p-1 text-xl" @click="emit('close')">&times;</button>
         </div>
         <slot />
       </div>
     </div>
   </Teleport>
 </template>
+

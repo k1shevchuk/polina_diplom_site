@@ -36,3 +36,4 @@ describe("checkout store", () => {
     expect(store.lastCheckout?.orders[1].seller_id).toBe(3);
   });
 });
+

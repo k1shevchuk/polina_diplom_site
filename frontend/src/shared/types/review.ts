@@ -8,3 +8,4 @@ export interface Review {
   is_hidden: boolean;
   created_at: string;
 }
+
