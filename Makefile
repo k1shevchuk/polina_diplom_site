@@ -19,7 +19,7 @@ migrate:
 	docker compose run --rm migrate
 
 seed:
-	docker compose exec backend python /scripts/seed.py
+	docker compose exec backend sh -lc "PYTHONPATH=/app python /scripts/seed.py"
 
 test:
 	docker compose exec backend pytest

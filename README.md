@@ -23,6 +23,7 @@ MVP маркетплейса изделий ручной работы на ст�
    - `make migrate`
 4. Заполнить демо-данными:
    - `make seed`
+   - Примечание: если вход под demo-аккаунтами не работает, проверьте что сидинг успешно выполнился.
 
 ### URLs
 - Frontend: `http://localhost:5173`
@@ -43,6 +44,11 @@ MVP маркетплейса изделий ручной работы на ст�
 - `admin@example.com` / `Admin12345`
 - `seller@example.com` / `Seller12345`
 - `buyer@example.com` / `Buyer12345`
+
+Если логин даёт 401:
+1. Убедитесь, что БД не была очищена (`make clean` удаляет volume с данными).
+2. Выполните миграции: `make migrate`
+3. Выполните сидинг: `make seed`
 
 ## Quality checks
 - Backend lint: `docker compose exec backend ruff check app tests`
@@ -69,4 +75,3 @@ MVP маркетплейса изделий ручной работы на ст�
   - `docker compose exec db mysqldump -u root -p$MYSQL_ROOT_PASSWORD $MYSQL_DATABASE > backup.sql`
 - Media volume:
   - `docker run --rm -v diplom_site_media_data:/data -v ${PWD}:/backup alpine tar czf /backup/media-backup.tgz -C /data .`
-
