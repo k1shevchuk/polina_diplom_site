@@ -23,16 +23,16 @@ onMounted(async () => {
 <template>
   <section class="space-y-6">
     <header class="rounded-[20px] bg-[linear-gradient(135deg,rgba(255,209,228,0.85),rgba(255,210,227,0.95))] p-6 md:p-8">
-      <h1 class="brand-title text-4xl font-bold text-primary-dark md:text-5xl">Избранное</h1>
-      <p class="mt-2 text-[1.16rem] text-primary-dark/85">Собрали товары, которые вам особенно понравились</p>
+      <h1 class="brand-title text-4xl font-bold text-primary-dark md:text-5xl">РР·Р±СЂР°РЅРЅРѕРµ</h1>
+      <p class="mt-2 text-[1.16rem] text-primary-dark/85">РЎРѕР±СЂР°Р»Рё С‚РѕРІР°СЂС‹, РєРѕС‚РѕСЂС‹Рµ РІР°Рј РѕСЃРѕР±РµРЅРЅРѕ РїРѕРЅСЂР°РІРёР»РёСЃСЊ</p>
     </header>
 
     <UiSkeleton v-if="isLoading" :rows="4" />
 
     <section v-else-if="favoriteProducts.length === 0" class="brand-empty-state p-8 text-center">
-      <h2 class="brand-title text-4xl font-bold text-primary-dark">Пока ничего нет</h2>
-      <p class="mt-2 text-[1.12rem] text-muted">Добавляйте вязаные изделия в избранное, чтобы вернуться к ним позже.</p>
-      <router-link to="/catalog" class="brand-btn mt-4 px-6 py-3">Открыть каталог</router-link>
+      <h2 class="brand-title text-4xl font-bold text-primary-dark">РџРѕРєР° РЅРёС‡РµРіРѕ РЅРµС‚</h2>
+      <p class="mt-2 text-[1.12rem] text-muted">Р”РѕР±Р°РІР»СЏР№С‚Рµ РІСЏР·Р°РЅС‹Рµ РёР·РґРµР»РёСЏ РІ РёР·Р±СЂР°РЅРЅРѕРµ, С‡С‚РѕР±С‹ РІРµСЂРЅСѓС‚СЊСЃСЏ Рє РЅРёРј РїРѕР·Р¶Рµ.</p>
+      <router-link to="/catalog" class="brand-btn mt-4 px-6 py-3">РћС‚РєСЂС‹С‚СЊ РєР°С‚Р°Р»РѕРі</router-link>
     </section>
 
     <section v-else class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">

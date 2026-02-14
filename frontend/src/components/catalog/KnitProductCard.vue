@@ -8,6 +8,7 @@ import { useFavoritesStore } from "../../features/favorites/store";
 import type { Product } from "../../shared/types/product";
 import { formatCurrency } from "../../shared/utils/currency";
 import { getProductImage } from "../../shared/utils/product-image";
+import { cleanText } from "../../shared/utils/text";
 
 const props = withDefaults(
   defineProps<{
@@ -25,6 +26,8 @@ const ui = useUiStore();
 
 const imageSrc = computed(() => getProductImage(props.product));
 const isFavorite = computed(() => favoritesStore.items.includes(props.product.id));
+const displayTitle = computed(() => cleanText(props.product.title, "Вязаное изделие"));
+const displayDescription = computed(() => cleanText(props.product.description, "Описание временно недоступно."));
 
 async function toggleFavorite() {
   if (!auth.isAuthenticated) {
@@ -62,7 +65,7 @@ async function addToCart() {
         :src="imageSrc"
         :srcset="`${imageSrc} 640w`"
         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-        :alt="product.title"
+        :alt="displayTitle"
         class="h-56 w-full object-cover transition duration-300 hover:scale-[1.02]"
         loading="lazy"
       />
@@ -103,9 +106,9 @@ async function addToCart() {
 
     <div class="space-y-3 p-4">
       <router-link :to="`/product/${product.id}`" class="block font-display text-2xl font-semibold text-primary-dark">
-        {{ product.title }}
+        {{ displayTitle }}
       </router-link>
-      <p v-if="!compact" class="line-clamp-2 text-base text-muted">{{ product.description }}</p>
+      <p v-if="!compact" class="line-clamp-2 text-base text-muted">{{ displayDescription }}</p>
       <div class="flex items-center justify-between">
         <strong class="text-2xl text-primary-dark">{{ formatCurrency(product.price) }}</strong>
         <router-link :to="`/product/${product.id}`" class="text-base font-semibold text-primary-dark">

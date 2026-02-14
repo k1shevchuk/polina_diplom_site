@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from "vue";
-import { useRoute } from "vue-router";
+import { computed, onMounted, ref } from "vue";
+import { onBeforeRouteUpdate, useRoute } from "vue-router";
 
 import KnitProductCard from "../../components/catalog/KnitProductCard.vue";
 import UiButton from "../../components/ui/UiButton.vue";
@@ -16,6 +16,7 @@ import type { Review } from "../../shared/types/review";
 import { formatCurrency } from "../../shared/utils/currency";
 import { formatDate } from "../../shared/utils/date";
 import { getProductImage } from "../../shared/utils/product-image";
+import { cleanText } from "../../shared/utils/text";
 
 const route = useRoute();
 const auth = useAuthStore();
@@ -41,12 +42,15 @@ const gallery = computed(() => {
 const selectedImageSrc = computed(() => gallery.value[selectedImage.value] || "");
 const isFavorite = computed(() => (product.value ? favoritesStore.items.includes(product.value.id) : false));
 const related = computed(() => relatedProducts.value.slice(0, 4));
+const productTitle = computed(() => cleanText(product.value?.title, "Р’СЏР·Р°РЅРѕРµ РёР·РґРµР»РёРµ"));
+const productDescription = computed(() => cleanText(product.value?.description, "РћРїРёСЃР°РЅРёРµ РІСЂРµРјРµРЅРЅРѕ РЅРµРґРѕСЃС‚СѓРїРЅРѕ."));
 
-async function fetchProductDetail() {
+async function fetchProductDetail(targetId?: number) {
   isLoading.value = true;
+  const id = targetId ?? productId.value;
 
   try {
-    const response = await api.get<Product>(`${endpoints.catalog}/${productId.value}`);
+    const response = await api.get<Product>(`${endpoints.catalog}/${id}`);
     product.value = response.data;
     selectedImage.value = 0;
 
@@ -82,15 +86,15 @@ async function addToCart() {
   if (!product.value) return;
 
   if (!auth.isAuthenticated) {
-    ui.pushToast("info", "Войдите, чтобы оформить заказ");
+    ui.pushToast("info", "Р’РѕР№РґРёС‚Рµ, С‡С‚РѕР±С‹ РѕС„РѕСЂРјРёС‚СЊ Р·Р°РєР°Р·");
     return;
   }
 
   try {
     await cartStore.addItem(product.value.id, 1);
-    ui.pushToast("success", "Товар добавлен в корзину");
+    ui.pushToast("success", "РўРѕРІР°СЂ РґРѕР±Р°РІР»РµРЅ РІ РєРѕСЂР·РёРЅСѓ");
   } catch {
-    ui.pushToast("error", "Не удалось добавить товар");
+    ui.pushToast("error", "РќРµ СѓРґР°Р»РѕСЃСЊ РґРѕР±Р°РІРёС‚СЊ С‚РѕРІР°СЂ");
   }
 }
 
@@ -98,15 +102,15 @@ async function toggleFavorite() {
   if (!product.value) return;
 
   if (!auth.isAuthenticated) {
-    ui.pushToast("info", "Войдите, чтобы добавить товар в избранное");
+    ui.pushToast("info", "Р’РѕР№РґРёС‚Рµ, С‡С‚РѕР±С‹ РґРѕР±Р°РІРёС‚СЊ С‚РѕРІР°СЂ РІ РёР·Р±СЂР°РЅРЅРѕРµ");
     return;
   }
 
   try {
     await favoritesStore.toggleFavorite(product.value.id);
-    ui.pushToast("success", isFavorite.value ? "Добавлено в избранное" : "Убрано из избранного");
+    ui.pushToast("success", isFavorite.value ? "Р”РѕР±Р°РІР»РµРЅРѕ РІ РёР·Р±СЂР°РЅРЅРѕРµ" : "РЈР±СЂР°РЅРѕ РёР· РёР·Р±СЂР°РЅРЅРѕРіРѕ");
   } catch {
-    ui.pushToast("error", "Не удалось обновить избранное");
+    ui.pushToast("error", "РќРµ СѓРґР°Р»РѕСЃСЊ РѕР±РЅРѕРІРёС‚СЊ РёР·Р±СЂР°РЅРЅРѕРµ");
   }
 }
 
@@ -121,8 +125,10 @@ onMounted(async () => {
   await fetchProductDetail();
 });
 
-watch(productId, () => {
-  fetchProductDetail();
+onBeforeRouteUpdate(async (to) => {
+  const nextId = Number(to.params.id);
+  if (!Number.isFinite(nextId)) return;
+  await fetchProductDetail(nextId);
 });
 </script>
 
@@ -133,11 +139,11 @@ watch(productId, () => {
     <template v-else-if="product">
       <section class="rounded-2xl bg-brand-100/60 p-4 text-[1.05rem] text-muted">
         <div class="flex flex-wrap items-center gap-2">
-          <router-link to="/" class="hover:text-primary-dark">Главная</router-link>
+          <router-link to="/" class="hover:text-primary-dark">Р“Р»Р°РІРЅР°СЏ</router-link>
           <span>/</span>
-          <router-link to="/catalog" class="hover:text-primary-dark">Каталог</router-link>
+          <router-link to="/catalog" class="hover:text-primary-dark">РљР°С‚Р°Р»РѕРі</router-link>
           <span>/</span>
-          <span class="text-primary-dark">{{ product.title }}</span>
+          <span class="text-primary-dark">{{ productTitle }}</span>
         </div>
       </section>
 
@@ -148,7 +154,7 @@ watch(productId, () => {
               :src="selectedImageSrc"
               :srcset="`${selectedImageSrc} 960w`"
               sizes="(max-width: 768px) 100vw, 56vw"
-              :alt="product.title"
+              :alt="productTitle"
               class="h-[430px] w-full object-cover md:h-[520px]"
               loading="lazy"
             />
@@ -160,46 +166,46 @@ watch(productId, () => {
               type="button"
               class="overflow-hidden rounded-xl border-2 transition"
               :class="selectedImage === index ? 'border-primary' : 'border-transparent hover:border-brand-200'"
-              :aria-label="`Открыть фото ${index + 1}`"
+              :aria-label="`РћС‚РєСЂС‹С‚СЊ С„РѕС‚Рѕ ${index + 1}`"
               @click="selectedImage = index"
             >
-              <img :src="image" :alt="`Фото ${index + 1}`" class="h-20 w-full object-cover" loading="lazy" />
+              <img :src="image" :alt="`Р¤РѕС‚Рѕ ${index + 1}`" class="h-20 w-full object-cover" loading="lazy" />
             </button>
           </div>
         </div>
 
         <article class="brand-card space-y-5 p-6">
           <div class="flex flex-wrap gap-2">
-            <span class="rounded-full bg-brand-100 px-3 py-1 text-sm font-bold text-primary-dark">Вязаное изделие</span>
-            <span class="rounded-full bg-brand-50 px-3 py-1 text-sm font-bold text-primary-dark">Ручная работа</span>
+            <span class="rounded-full bg-brand-100 px-3 py-1 text-sm font-bold text-primary-dark">Р’СЏР·Р°РЅРѕРµ РёР·РґРµР»РёРµ</span>
+            <span class="rounded-full bg-brand-50 px-3 py-1 text-sm font-bold text-primary-dark">Р СѓС‡РЅР°СЏ СЂР°Р±РѕС‚Р°</span>
           </div>
 
-          <h1 class="brand-title text-4xl font-bold text-primary-dark md:text-5xl">{{ product.title }}</h1>
-          <p class="text-[1.2rem] text-muted">{{ product.description }}</p>
+          <h1 class="brand-title text-4xl font-bold text-primary-dark md:text-5xl">{{ productTitle }}</h1>
+          <p class="text-[1.2rem] text-muted">{{ productDescription }}</p>
 
           <div class="flex items-end gap-3">
             <p class="text-4xl font-extrabold text-primary-dark">{{ formatCurrency(product.price) }}</p>
-            <span class="pb-1 text-[1.08rem] text-muted">{{ product.stock ? `В наличии: ${product.stock}` : "В наличии" }}</span>
+            <span class="pb-1 text-[1.08rem] text-muted">{{ product.stock ? `Р’ РЅР°Р»РёС‡РёРё: ${product.stock}` : "Р’ РЅР°Р»РёС‡РёРё" }}</span>
           </div>
 
           <div class="grid gap-3 sm:grid-cols-2">
-            <UiButton class="w-full" @click="addToCart">Добавить в корзину</UiButton>
+            <UiButton class="w-full" @click="addToCart">Р”РѕР±Р°РІРёС‚СЊ РІ РєРѕСЂР·РёРЅСѓ</UiButton>
             <UiButton class="w-full" variant="secondary" @click="toggleFavorite">
-              {{ isFavorite ? "Убрать из избранного" : "В избранное" }}
+              {{ isFavorite ? "РЈР±СЂР°С‚СЊ РёР· РёР·Р±СЂР°РЅРЅРѕРіРѕ" : "Р’ РёР·Р±СЂР°РЅРЅРѕРµ" }}
             </UiButton>
           </div>
 
           <div class="rounded-2xl bg-brand-50 p-4">
-            <p class="text-[1.1rem] font-semibold text-primary-dark">Продавец #{{ product.seller_id }}</p>
+            <p class="text-[1.1rem] font-semibold text-primary-dark">РџСЂРѕРґР°РІРµС† #{{ product.seller_id }}</p>
             <router-link :to="`/seller/${product.seller_id}`" class="text-[1.05rem] font-semibold text-primary-dark">
-              Открыть профиль продавца
+              РћС‚РєСЂС‹С‚СЊ РїСЂРѕС„РёР»СЊ РїСЂРѕРґР°РІС†Р°
             </router-link>
           </div>
 
           <ul class="space-y-2 text-[1.06rem] text-muted">
-            <li>Бережная упаковка и отправка</li>
-            <li>Оформление заказа без онлайн-оплаты</li>
-            <li>Уведомления продавцу сразу после checkout</li>
+            <li>Р‘РµСЂРµР¶РЅР°СЏ СѓРїР°РєРѕРІРєР° Рё РѕС‚РїСЂР°РІРєР°</li>
+            <li>РћС„РѕСЂРјР»РµРЅРёРµ Р·Р°РєР°Р·Р° Р±РµР· РѕРЅР»Р°Р№РЅ-РѕРїР»Р°С‚С‹</li>
+            <li>РЈРІРµРґРѕРјР»РµРЅРёСЏ РїСЂРѕРґР°РІС†Сѓ СЃСЂР°Р·Сѓ РїРѕСЃР»Рµ checkout</li>
           </ul>
         </article>
       </section>
@@ -212,7 +218,7 @@ watch(productId, () => {
             type="button"
             @click="activeTab = 'description'"
           >
-            Описание
+            РћРїРёСЃР°РЅРёРµ
           </button>
           <button
             class="rounded-full px-4 py-2 text-[1.08rem] font-semibold transition"
@@ -220,7 +226,7 @@ watch(productId, () => {
             type="button"
             @click="activeTab = 'reviews'"
           >
-            Отзывы ({{ reviews.length }})
+            РћС‚Р·С‹РІС‹ ({{ reviews.length }})
           </button>
           <button
             class="rounded-full px-4 py-2 text-[1.08rem] font-semibold transition"
@@ -228,18 +234,18 @@ watch(productId, () => {
             type="button"
             @click="activeTab = 'delivery'"
           >
-            Доставка
+            Р”РѕСЃС‚Р°РІРєР°
           </button>
         </div>
 
         <div v-if="activeTab === 'description'" class="space-y-3 text-[1.12rem] text-muted">
-          <p>{{ product.description }}</p>
-          <p>Каждое изделие Craft With Love связано вручную и проходит проверку качества перед публикацией в каталоге.</p>
+          <p>{{ productDescription }}</p>
+          <p>РљР°Р¶РґРѕРµ РёР·РґРµР»РёРµ Craft With Love СЃРІСЏР·Р°РЅРѕ РІСЂСѓС‡РЅСѓСЋ Рё РїСЂРѕС…РѕРґРёС‚ РїСЂРѕРІРµСЂРєСѓ РєР°С‡РµСЃС‚РІР° РїРµСЂРµРґ РїСѓР±Р»РёРєР°С†РёРµР№ РІ РєР°С‚Р°Р»РѕРіРµ.</p>
         </div>
 
         <div v-else-if="activeTab === 'reviews'" class="space-y-4">
           <div v-if="reviews.length === 0" class="brand-empty-state p-5 text-center">
-            <p class="text-[1.08rem] text-muted">Пока нет отзывов. Будьте первым покупателем, кто поделится впечатлением.</p>
+            <p class="text-[1.08rem] text-muted">РџРѕРєР° РЅРµС‚ РѕС‚Р·С‹РІРѕРІ. Р‘СѓРґСЊС‚Рµ РїРµСЂРІС‹Рј РїРѕРєСѓРїР°С‚РµР»РµРј, РєС‚Рѕ РїРѕРґРµР»РёС‚СЃСЏ РІРїРµС‡Р°С‚Р»РµРЅРёРµРј.</p>
           </div>
 
           <article
@@ -248,32 +254,32 @@ watch(productId, () => {
             class="rounded-2xl border border-brand-100 bg-white p-4"
           >
             <div class="flex items-center justify-between gap-2">
-              <p class="font-semibold text-primary-dark">Покупатель #{{ review.user_id }}</p>
+              <p class="font-semibold text-primary-dark">РџРѕРєСѓРїР°С‚РµР»СЊ #{{ review.user_id }}</p>
               <p class="text-sm text-muted">{{ formatDate(review.created_at) }}</p>
             </div>
-            <p class="text-sm text-primary-dark">Оценка: {{ review.rating }}/5</p>
-            <p class="mt-2 text-[1.07rem] text-muted">{{ review.text }}</p>
+            <p class="text-sm text-primary-dark">РћС†РµРЅРєР°: {{ review.rating }}/5</p>
+            <p class="mt-2 text-[1.07rem] text-muted">{{ cleanText(review.text, "Р‘РµР· С‚РµРєСЃС‚Р°") }}</p>
           </article>
         </div>
 
         <div v-else class="space-y-3 text-[1.12rem] text-muted">
-          <p>После оформления заказа продавец получает уведомление и подтверждает детали вручную.</p>
-          <p>Средний срок отправки: 1-3 дня, в зависимости от готовности изделия.</p>
-          <p>Подробные условия смотрите в разделе <router-link to="/customers" class="font-semibold">Покупателям</router-link>.</p>
+          <p>РџРѕСЃР»Рµ РѕС„РѕСЂРјР»РµРЅРёСЏ Р·Р°РєР°Р·Р° РїСЂРѕРґР°РІРµС† РїРѕР»СѓС‡Р°РµС‚ СѓРІРµРґРѕРјР»РµРЅРёРµ Рё РїРѕРґС‚РІРµСЂР¶РґР°РµС‚ РґРµС‚Р°Р»Рё РІСЂСѓС‡РЅСѓСЋ.</p>
+          <p>РЎСЂРµРґРЅРёР№ СЃСЂРѕРє РѕС‚РїСЂР°РІРєРё: 1-3 РґРЅСЏ, РІ Р·Р°РІРёСЃРёРјРѕСЃС‚Рё РѕС‚ РіРѕС‚РѕРІРЅРѕСЃС‚Рё РёР·РґРµР»РёСЏ.</p>
+          <p>РџРѕРґСЂРѕР±РЅС‹Рµ СѓСЃР»РѕРІРёСЏ СЃРјРѕС‚СЂРёС‚Рµ РІ СЂР°Р·РґРµР»Рµ <router-link to="/customers" class="font-semibold">РџРѕРєСѓРїР°С‚РµР»СЏРј</router-link>.</p>
         </div>
       </section>
 
       <section class="space-y-4">
         <div class="flex items-end justify-between gap-3">
-          <h2 class="brand-title text-4xl font-bold text-primary-dark md:text-5xl">Похожие товары</h2>
-          <router-link to="/catalog" class="text-[1.1rem] font-semibold text-primary-dark">Все товары</router-link>
+          <h2 class="brand-title text-4xl font-bold text-primary-dark md:text-5xl">РџРѕС…РѕР¶РёРµ С‚РѕРІР°СЂС‹</h2>
+          <router-link to="/catalog" class="text-[1.1rem] font-semibold text-primary-dark">Р’СЃРµ С‚РѕРІР°СЂС‹</router-link>
         </div>
 
         <div v-if="related.length" class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           <KnitProductCard v-for="item in related" :key="item.id" :product="item" compact />
         </div>
         <div v-else class="brand-empty-state p-6 text-center text-[1.05rem] text-muted">
-          В этой категории пока нет других товаров.
+          Р’ СЌС‚РѕР№ РєР°С‚РµРіРѕСЂРёРё РїРѕРєР° РЅРµС‚ РґСЂСѓРіРёС… С‚РѕРІР°СЂРѕРІ.
         </div>
       </section>
 
@@ -281,17 +287,17 @@ watch(productId, () => {
         <div class="flex items-center justify-between gap-3">
           <strong class="text-xl text-primary-dark">{{ formatCurrency(product.price) }}</strong>
           <div class="flex gap-2">
-            <UiButton variant="secondary" @click="toggleFavorite">Избранное</UiButton>
-            <UiButton @click="addToCart">Купить</UiButton>
+            <UiButton variant="secondary" @click="toggleFavorite">РР·Р±СЂР°РЅРЅРѕРµ</UiButton>
+            <UiButton @click="addToCart">РљСѓРїРёС‚СЊ</UiButton>
           </div>
         </div>
       </div>
     </template>
 
     <section v-else class="brand-empty-state p-8 text-center">
-      <h2 class="brand-title text-4xl font-bold text-primary-dark">Товар не найден</h2>
-      <p class="mt-2 text-[1.1rem] text-muted">Возможно, изделие уже снято с витрины.</p>
-      <router-link to="/catalog" class="brand-btn mt-4 px-6 py-3">Вернуться в каталог</router-link>
+      <h2 class="brand-title text-4xl font-bold text-primary-dark">РўРѕРІР°СЂ РЅРµ РЅР°Р№РґРµРЅ</h2>
+      <p class="mt-2 text-[1.1rem] text-muted">Р’РѕР·РјРѕР¶РЅРѕ, РёР·РґРµР»РёРµ СѓР¶Рµ СЃРЅСЏС‚Рѕ СЃ РІРёС‚СЂРёРЅС‹.</p>
+      <router-link to="/catalog" class="brand-btn mt-4 px-6 py-3">Р’РµСЂРЅСѓС‚СЊСЃСЏ РІ РєР°С‚Р°Р»РѕРі</router-link>
     </section>
   </section>
 </template>

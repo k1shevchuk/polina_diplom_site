@@ -169,7 +169,6 @@ body {
 }
 
 .brand-nav-link:hover::after,
-.brand-nav-link.router-link-active::after,
 .brand-nav-link.router-link-exact-active::after {
   width: 100%;
 }

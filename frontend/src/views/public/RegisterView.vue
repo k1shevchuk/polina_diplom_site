@@ -15,10 +15,10 @@ const router = useRouter();
 async function submit() {
   try {
     await auth.register(form.email, form.password);
-    ui.pushToast("success", "Регистрация завершена");
+    ui.pushToast("success", "Р РµРіРёСЃС‚СЂР°С†РёСЏ Р·Р°РІРµСЂС€РµРЅР°");
     router.push("/");
   } catch {
-    ui.pushToast("error", "Не удалось зарегистрироваться");
+    ui.pushToast("error", "РќРµ СѓРґР°Р»РѕСЃСЊ Р·Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°С‚СЊСЃСЏ");
   }
 }
 </script>
@@ -26,19 +26,19 @@ async function submit() {
 <template>
   <section class="mx-auto max-w-xl space-y-6">
     <header class="rounded-[20px] bg-[linear-gradient(135deg,rgba(255,209,228,0.85),rgba(255,210,227,0.95))] p-6 text-center md:p-8">
-      <h1 class="brand-title text-4xl font-bold text-primary-dark md:text-5xl">Регистрация</h1>
-      <p class="mt-2 text-[1.15rem] text-primary-dark/85">Создайте профиль в Craft With Love</p>
+      <h1 class="brand-title text-4xl font-bold text-primary-dark md:text-5xl">Р РµРіРёСЃС‚СЂР°С†РёСЏ</h1>
+      <p class="mt-2 text-[1.15rem] text-primary-dark/85">РЎРѕР·РґР°Р№С‚Рµ РїСЂРѕС„РёР»СЊ РІ Craft With Love</p>
     </header>
 
     <form class="brand-card space-y-4 p-6" @submit.prevent="submit">
       <UiInput v-model="form.email" type="email" label="Email" aria-label="Email" />
-      <UiInput v-model="form.password" type="password" label="Пароль" aria-label="Пароль" />
-      <UiButton type="submit" class="w-full" :disabled="auth.isLoading">Создать аккаунт</UiButton>
+      <UiInput v-model="form.password" type="password" label="РџР°СЂРѕР»СЊ" aria-label="РџР°СЂРѕР»СЊ" />
+      <UiButton type="submit" class="w-full" :disabled="auth.isLoading">РЎРѕР·РґР°С‚СЊ Р°РєРєР°СѓРЅС‚</UiButton>
     </form>
 
     <p class="text-center text-[1.08rem] text-muted">
-      Уже есть аккаунт?
-      <router-link to="/auth/login" class="font-bold text-primary-dark">Войти</router-link>
+      РЈР¶Рµ РµСЃС‚СЊ Р°РєРєР°СѓРЅС‚?
+      <router-link to="/auth/login" class="font-bold text-primary-dark">Р’РѕР№С‚Рё</router-link>
     </p>
   </section>
 </template>

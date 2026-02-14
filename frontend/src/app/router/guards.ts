@@ -1,43 +1,38 @@
-import type { NavigationGuardNext, RouteLocationNormalized } from "vue-router";
+import type { RouteLocationNormalized } from "vue-router";
 
 import { useAuthStore } from "../stores/auth";
 
-export async function authGuard(to: RouteLocationNormalized, _from: RouteLocationNormalized, next: NavigationGuardNext) {
+export async function authGuard(to: RouteLocationNormalized) {
   const auth = useAuthStore();
 
-  if (!auth.token) {
-    if (to.meta.public) {
-      next();
-      return;
+  if (!auth.token && !to.meta.public) {
+    try {
+      await auth.refresh();
+    } catch {
+      return "/auth/login";
     }
-    next("/auth/login");
-    return;
   }
 
-  if (!auth.me) {
+  if (auth.token && !auth.me) {
     try {
       await auth.fetchMe();
     } catch {
-      next("/auth/login");
-      return;
+      return "/auth/login";
     }
   }
 
   if (auth.me?.is_banned) {
     await auth.logout();
-    next("/auth/login");
-    return;
+    return "/auth/login";
   }
 
   const requiredRoles = (to.meta.roles as string[] | undefined) ?? [];
   if (requiredRoles.length > 0) {
     const hasAny = requiredRoles.some((role) => auth.hasRole(role as any));
     if (!hasAny) {
-      next("/");
-      return;
+      return "/";
     }
   }
 
-  next();
+  return true;
 }
-

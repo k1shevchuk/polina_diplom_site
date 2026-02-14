@@ -9,7 +9,7 @@ const emit = defineEmits<{ (e: "close"): void }>();
       <div class="brand-card w-full max-w-lg p-6">
         <div class="mb-4 flex items-center justify-between">
           <h3 class="font-display text-2xl font-bold text-primary-dark">{{ title }}</h3>
-          <button aria-label="Çàêğûòü" class="rounded p-1 text-xl text-primary-dark" @click="emit('close')">&times;</button>
+          <button aria-label="Ğ—Ğ°ĞºÑ€Ñ‹Ñ‚ÑŒ" class="rounded p-1 text-xl text-primary-dark" @click="emit('close')">&times;</button>
         </div>
         <slot />
       </div>

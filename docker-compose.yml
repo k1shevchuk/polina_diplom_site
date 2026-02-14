@@ -74,7 +74,6 @@ services:
   adminer:
     image: adminer:4.8.1
     restart: unless-stopped
-    profiles: ["tools"]
     ports:
       - "8080:8080"
     depends_on:

@@ -18,6 +18,7 @@ export interface ConfirmPayload {
 export const useUiStore = defineStore("ui", () => {
   const toasts = ref<ToastItem[]>([]);
   const confirm = ref<ConfirmPayload | null>(null);
+  const fatalError = ref<string | null>(null);
 
   function pushToast(type: ToastItem["type"], message: string) {
     const id = Date.now() + Math.floor(Math.random() * 1000);
@@ -35,12 +36,23 @@ export const useUiStore = defineStore("ui", () => {
     confirm.value = null;
   }
 
+  function setFatalError(message: string) {
+    fatalError.value = message;
+  }
+
+  function clearFatalError() {
+    fatalError.value = null;
+  }
+
   return {
     toasts,
     confirm,
+    fatalError,
     pushToast,
     askConfirm,
     closeConfirm,
+    setFatalError,
+    clearFatalError,
   };
 });
 

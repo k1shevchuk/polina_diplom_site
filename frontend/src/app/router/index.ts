@@ -69,6 +69,8 @@ const routes: RouteRecordRaw[] = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
+  linkActiveClass: "router-link-active",
+  linkExactActiveClass: "router-link-exact-active",
   scrollBehavior(to) {
     if (to.hash) {
       return { el: to.hash, top: 96, behavior: "smooth" };

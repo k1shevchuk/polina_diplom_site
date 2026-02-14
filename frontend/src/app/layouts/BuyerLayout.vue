@@ -14,35 +14,35 @@ import BrandHeader from "./BrandHeader.vue";
             active-class="bg-brand-gradient text-white"
             to="/orders"
           >
-            Мои заказы
+            РњРѕРё Р·Р°РєР°Р·С‹
           </router-link>
           <router-link
             class="rounded-full px-4 py-1.5 text-primary-dark transition hover:bg-brand-100"
             active-class="bg-brand-gradient text-white"
             to="/favorites"
           >
-            Избранное
+            РР·Р±СЂР°РЅРЅРѕРµ
           </router-link>
           <router-link
             class="rounded-full px-4 py-1.5 text-primary-dark transition hover:bg-brand-100"
             active-class="bg-brand-gradient text-white"
             to="/messages"
           >
-            Сообщения
+            РЎРѕРѕР±С‰РµРЅРёСЏ
           </router-link>
           <router-link
             class="rounded-full px-4 py-1.5 text-primary-dark transition hover:bg-brand-100"
             active-class="bg-brand-gradient text-white"
             to="/notifications"
           >
-            Уведомления
+            РЈРІРµРґРѕРјР»РµРЅРёСЏ
           </router-link>
           <router-link
             class="rounded-full px-4 py-1.5 text-primary-dark transition hover:bg-brand-100"
             active-class="bg-brand-gradient text-white"
             to="/me"
           >
-            Профиль
+            РџСЂРѕС„РёР»СЊ
           </router-link>
         </nav>
 
