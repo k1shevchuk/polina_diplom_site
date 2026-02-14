@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Каталог - Связано с любовью</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Dancing+Script:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-inner">
+                <a href="index.html" class="logo">
+                    <img src="images/logo.png" alt="Связано с любовью">
+                </a>
+                <nav class="nav">
+                    <ul>
+                        <li><a href="index.html">Главная</a></li>
+                        <li><a href="catalog.html" class="active">Каталог</a></li>
+                        <li><a href="about.html">О бренде</a></li>
+                        <li><a href="favorites.html">Избранное</a></li>
+                        <li><a href="cart.html" class="cart-link">Корзина <span id="cart-count">0</span></a></li>
+                        <li><a href="account.html" id="account-link">Личный кабинет</a></li>
+                    </ul>
+                </nav>
+                <div class="mobile-menu-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="catalog-header">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Наш Каталог</h2>
+                </div>
+            </div>
+        </section>
+
+        <section class="catalog-filters">
+            <div class="container">
+                <div class="filters">
+                    <div class="filter-group">
+                        <h3>Категории</h3>
+                        <div class="filter-options">
+                            <div class="filter-option active" data-category="all">Все товары</div>
+                            <div class="filter-option" data-category="new">Новинки</div>
+                            <div class="filter-option" data-category="sweaters">Свитеры</div>
+                            <div class="filter-option" data-category="cardigans">Кардиганы</div>
+                            <div class="filter-option" data-category="dresses">Платья</div>
+                            <div class="filter-option" data-category="skirts">Юбки</div>
+                            <div class="filter-option" data-category="bags">Сумки</div>
+                            <div class="filter-option" data-category="accessories">Аксессуары</div>
+                            <div class="filter-option" data-category="sale">Акции</div>
+                        </div>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <h3>Цена</h3>
+                        <input type="range" class="price-range" min="0" max="10000" value="10000" step="100">
+                        <div class="price-values">
+                            <span>0 руб.</span>
+                            <span class="max-price">10000 руб.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="catalog-products">
+            <div class="container">
+                <div class="catalog-grid" id="catalog-grid">
+                    <!-- Товары будут загружены через JavaScript -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <a href="index.html" class="logo1">
+                    <a href="index.html" class="logo">Связано с любовью</a>
+                    <p>Создаем уютные вязаные вещи с любовью и заботой. Каждое изделие уникально и сделано вручную с использованием натуральных материалов.</p>
+                    <div class="social-links">
+                        <a href="https://t.me/+Z6zFj3_33ulkZTky">Tg</a>
+                        <a href="#">VK</a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Покупателям</h3>
+                    <ul>
+                        <li><a href="customers.html#delivery">Доставка</a></li>
+                        <li><a href="customers.html#returns">Возврат</a></li>
+                        <li><a href="customers.html#payment">Оплата</a></li>
+                        <li><a href="customers.html#care">Уход за изделием</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Каталог</h3>
+                    <ul>
+                        <li><a href="catalog.html?category=new">Новинки</a></li>
+                        <li><a href="catalog.html?category=sale">Акции</a></li>
+                        <li><a href="catalog.html?category=sweaters">Свитеры</a></li>
+                        <li><a href="catalog.html?category=cardigans">Кардиганы</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2025 Связано с любовью.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/database.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>

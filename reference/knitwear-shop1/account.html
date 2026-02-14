@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Личный кабинет - Связано с любовью</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Dancing+Script:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-inner">
+                <a href="index.html" class="logo">
+                    <img src="images/logo.png" alt="Вязаный мир">
+                </a>
+                <nav class="nav">
+                    <ul>
+                        <li><a href="index.html">Главная</a></li>
+                        <li><a href="catalog.html">Каталог</a></li>
+                        <li><a href="about.html">О бренде</a></li>
+                        <li><a href="favorites.html">Избранное</a></li>
+                        <li><a href="cart.html" class="cart-link">Корзина <span id="cart-count">0</span></a></li>
+                        <li><a href="account.html" class="active" id="account-link">Личный кабинет</a></li>
+                    </ul>
+                </nav>
+                <div class="mobile-menu-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="account-header">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Личный кабинет</h2>
+                    <p>Управление вашими данными и заказами</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="account-content">
+            <div class="container">
+                <!-- Форма авторизации/регистрации -->
+                <div class="auth-form" id="auth-form">
+                    <div class="auth-tabs">
+                        <div class="auth-tab active" data-target="login">Вход</div>
+                        <div class="auth-tab" data-target="register">Регистрация</div>
+                    </div>
+                    
+                    <div class="auth-content active" id="login">
+                        <form id="login-form">
+                            <div class="form-group">
+                                <label for="login-email">Email</label>
+                                <input type="email" id="login-email" name="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="login-password">Пароль</label>
+                                <input type="password" id="login-password" name="password" required>
+                            </div>
+                            <button type="submit" class="btn">Войти</button>
+                        </form>
+                    </div>
+                    
+                    <div class="auth-content" id="register">
+                        <form id="register-form">
+                            <div class="form-group">
+                                <label for="reg-name">Имя</label>
+                                <input type="text" id="reg-name" name="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="reg-email">Email</label>
+                                <input type="email" id="reg-email" name="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="reg-password">Пароль</label>
+                                <input type="password" id="reg-password" name="password" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="reg-confirm-password">Подтвердите пароль</label>
+                                <input type="password" id="reg-confirm-password" name="confirm-password" required>
+                            </div>
+                            <button type="submit" class="btn">Зарегистрироваться</button>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- Профиль пользователя -->
+                <div class="user-profile" id="user-profile" style="display: none;">
+                    <div class="user-info">
+                        <div class="user-avatar" id="user-avatar">М</div>
+                        <div class="user-details">
+                            <h2 id="user-name">Мария</h2>
+                            <p id="user-email">maria@example.com</p>
+                        </div>
+                    </div>
+                    
+                    <div class="user-actions">
+                        <button class="btn btn-outline logout-btn">Выйти</button>
+                    </div>
+                    
+                    <div class="user-sections">
+                        <div class="user-section">
+                            <h3>Мои заказы</h3>
+                            <div class="orders-list">
+                                <p>У вас пока нет заказов</p>
+                            </div>
+                        </div>
+                        
+                        <div class="user-section">
+                            <h3>Мои отзывы</h3>
+                            <div class="reviews-list" id="user-reviews">
+                                <!-- Отзывы пользователя -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <a href="index.html" class="logo1">
+                    <a href="index.html" class="logo">Связано с любовью</a>
+                    <p>Создаем уютные вязаные вещи с любовью и заботой. Каждое изделие уникально и сделано вручную с использованием натуральных материалов.</p>
+                    <div class="social-links">
+                        <a href="https://t.me/+Z6zFj3_33ulkZTky">Tg</a>
+                        <a href="#">VK</a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Покупателям</h3>
+                    <ul>
+                        <li><a href="customers.html#delivery">Доставка</a></li>
+                        <li><a href="customers.html#returns">Возврат</a></li>
+                        <li><a href="customers.html#payment">Оплата</a></li>
+                        <li><a href="customers.html#care">Уход за изделием</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Каталог</h3>
+                    <ul>
+                        <li><a href="catalog.html?category=new">Новинки</a></li>
+                        <li><a href="catalog.html?category=sale">Акции</a></li>
+                        <li><a href="catalog.html?category=sweaters">Свитеры</a></li>
+                        <li><a href="catalog.html?category=cardigans">Кардиганы</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2025 Связано с любовью.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/database.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Корзина - Связано с любовью</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Dancing+Script:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-inner">
+                <a href="index.html" class="logo">
+                    <img src="images/logo.png" alt="Вязаный мир">
+                </a>
+                <nav class="nav">
+                    <ul>
+                        <li><a href="index.html">Главная</a></li>
+                        <li><a href="catalog.html">Каталог</a></li>
+                        <li><a href="about.html">О бренде</a></li>
+                        <li><a href="favorites.html">Избранное</a></li>
+                        <li><a href="cart.html" class="active cart-link">Корзина <span id="cart-count">0</span></a></li>
+                        <li><a href="account.html" id="account-link">Личный кабинет</a></li>
+                    </ul>
+                </nav>
+                <div class="mobile-menu-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="catalog-header">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Ваша корзина</h2>
+                </div>
+            </div>
+        </section>
+
+        <section class="cart-content">
+            <div class="container">
+                <div class="cart-layout">
+                    <div class="cart-items-section">
+                        <div class="cart-items" id="cart-items">
+                            <!-- Товары в корзине будут загружены через JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <div class="cart-summary-section">
+                        <div class="cart-summary">
+                            <h3>Итоги заказа</h3>
+                            <div class="summary-row">
+                                <span>Товары:</span>
+                                <span id="subtotal">0 руб.</span>
+                            </div>
+                            <div class="summary-row">
+                                <span>Доставка:</span>
+                                <span>500 руб.</span>
+                            </div>
+                            <div class="summary-row summary-total">
+                                <span>Итого:</span>
+                                <span id="total">0 руб.</span>
+                            </div>
+                            
+                            <div class="checkout-form" id="checkout-form">
+                                <h4>Оформление заказа</h4>
+                                <form id="order-form">
+                                    <div class="form-group">
+                                        <label for="address">Адрес доставки</label>
+                                        <textarea id="address" name="address" required placeholder="Укажите полный адрес доставки"></textarea>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label>Способ оплаты</label>
+                                        <div class="payment-methods">
+                                            <div class="payment-method active" data-method="card">
+                                                <div>💳</div>
+                                                <span>Карта онлайн</span>
+                                            </div>
+                                            <div class="payment-method" data-method="cash">
+                                                <div>💵</div>
+                                                <span>Наложенный платеж</span>
+                                            </div>
+                                        </div>
+                                        <input type="hidden" name="payment" id="payment-method" value="card" required>
+                                    </div>
+                                    
+                                    <button type="submit" class="btn" style="width: 100%;">Оформить заказ</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <a href="index.html" class="logo1">
+                    <a href="index.html" class="logo">Связано с любовью</a>
+                    <p>Создаем уютные вязаные вещи с любовью и заботой. Каждое изделие уникально и сделано вручную с использованием натуральных материалов.</p>
+                    <div class="social-links">
+                        <a href="https://t.me/+Z6zFj3_33ulkZTky">Tg</a>
+                        <a href="#">VK</a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Покупателям</h3>
+                    <ul>
+                        <li><a href="customers.html#delivery">Доставка</a></li>
+                        <li><a href="customers.html#returns">Возврат</a></li>
+                        <li><a href="customers.html#payment">Оплата</a></li>
+                        <li><a href="customers.html#care">Уход за изделием</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Каталог</h3>
+                    <ul>
+                        <li><a href="catalog.html?category=new">Новинки</a></li>
+                        <li><a href="catalog.html?category=sale">Акции</a></li>
+                        <li><a href="catalog.html?category=sweaters">Свитеры</a></li>
+                        <li><a href="catalog.html?category=cardigans">Кардиганы</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2025 Связано с любовью.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/database.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>
