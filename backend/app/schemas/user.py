@@ -6,7 +6,7 @@ from app.models.role import RoleName
 from app.schemas.common import BaseSchema
 
 
-class RoleOut(BaseModel):
+class RoleOut(BaseSchema):
     id: int
     name: RoleName
 

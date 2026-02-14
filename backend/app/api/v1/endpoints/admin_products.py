@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy import select
 from sqlalchemy.orm import Session, selectinload
 
@@ -9,10 +9,15 @@ from app.models.product import Product
 from app.models.role import RoleName
 from app.models.user import User
 from app.schemas.common import MessageResponse, PaginationMeta
-from app.schemas.product import ProductModerationRequest, ProductOut
+from app.schemas.product import ProductModerationRequest, ProductOut, ProductUpdate
 from app.services.admin_service import log_admin_action
 from app.services.notification_service import create_notification
-from app.services.product_service import admin_hide_or_delete_product, list_moderation_queue, moderate_product
+from app.services.product_service import (
+    admin_hide_or_delete_product,
+    list_moderation_queue,
+    moderate_product,
+    update_product,
+)
 
 router = APIRouter()
 
@@ -82,3 +87,26 @@ def delete_or_hide(
         details={"hard_delete": hard_delete},
     )
     return MessageResponse(message="Product updated")
+
+
+@router.put("/{product_id}", response_model=ProductOut)
+def update_any_product(
+    product_id: int,
+    payload: ProductUpdate,
+    current_admin: User = Depends(require_roles(RoleName.ADMIN)),
+    db: Session = Depends(get_db),
+):
+    product = db.scalar(select(Product).options(selectinload(Product.images)).where(Product.id == product_id))
+    if not product:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Product not found")
+
+    updated = update_product(db, product, payload.model_dump(exclude_unset=True))
+    log_admin_action(
+        db,
+        admin_user_id=current_admin.id,
+        action="update_product",
+        target_type="product",
+        target_id=product_id,
+        details={"fields": sorted(payload.model_dump(exclude_unset=True).keys())},
+    )
+    return ProductOut.model_validate(updated)

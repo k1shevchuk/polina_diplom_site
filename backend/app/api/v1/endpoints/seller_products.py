@@ -63,8 +63,18 @@ def update_product_handler(
     db: Session = Depends(get_db),
 ):
     product = get_seller_product(db, current_user.id, product_id)
-    updated = update_product(db, product, {k: v for k, v in payload.model_dump().items() if v is not None})
+    updated = update_product(db, product, payload.model_dump(exclude_unset=True))
     return ProductOut.model_validate(updated)
+
+
+@router.get("/{product_id}", response_model=ProductOut)
+def seller_product_detail(
+    product_id: int,
+    current_user: User = Depends(require_roles(RoleName.SELLER, RoleName.ADMIN)),
+    db: Session = Depends(get_db),
+):
+    product = get_seller_product(db, current_user.id, product_id)
+    return ProductOut.model_validate(product)
 
 
 @router.post("/{product_id}/submit", response_model=ProductOut)

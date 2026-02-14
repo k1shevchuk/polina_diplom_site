@@ -8,6 +8,7 @@ from app.models.role import RoleName
 from app.models.user import User
 from app.schemas.user import UserOut
 from app.services.admin_service import log_admin_action
+from app.services.auth_service import revoke_all_refresh_tokens_for_user
 
 router = APIRouter()
 
@@ -35,6 +36,8 @@ def ban_user(
     db.add(user)
     db.commit()
     db.refresh(user)
+    if is_banned:
+        revoke_all_refresh_tokens_for_user(db, user.id)
     log_admin_action(
         db,
         admin_user_id=current_admin.id,
