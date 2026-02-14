@@ -14,6 +14,21 @@ export const endpoints = {
     buyer: "/orders/my",
     seller: "/orders/seller",
   },
+  seller: {
+    products: "/seller/products",
+    dashboard: "/seller/dashboard",
+    profile: "/seller/profile",
+    uploadImage: "/seller/products/upload-image",
+    publicById: (sellerId: number) => `/sellers/${sellerId}`,
+  },
+  admin: {
+    users: "/admin/users",
+    products: "/admin/products",
+    reviews: "/admin/reviews",
+    stats: "/admin/stats",
+    statsTrend: "/admin/stats/trend",
+    audit: "/admin/audit",
+  },
   favorites: "/favorites",
   reviewsByProduct: (productId: number) => `/reviews/product/${productId}`,
   messages: {

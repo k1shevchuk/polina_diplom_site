@@ -88,9 +88,9 @@ function syncFromRouteQuery() {
   maxPrice.value = clampPrice(maxPriceQuery, PRICE_MAX);
 
   if (minPrice.value > maxPrice.value) {
-    const fallbackMiddle = Math.floor((minPrice.value + maxPrice.value) / 2);
-    minPrice.value = clampPrice(fallbackMiddle, PRICE_MIN);
-    maxPrice.value = clampPrice(fallbackMiddle, PRICE_MAX);
+    const middle = Math.floor((minPrice.value + maxPrice.value) / 2);
+    minPrice.value = clampPrice(middle, PRICE_MIN);
+    maxPrice.value = clampPrice(middle, PRICE_MAX);
   }
 
   const pageQuery = typeof route.query.page === "string" ? Number(route.query.page) : 1;
@@ -111,6 +111,17 @@ function updateRouteQuery() {
   if (page.value > 1) query.page = String(page.value);
 
   router.replace({ query }).catch(() => void 0);
+}
+
+function loadCatalog() {
+  catalog.fetchCatalog({
+    q: combinedQuery.value,
+    min_price: minPrice.value > PRICE_MIN ? minPrice.value : undefined,
+    max_price: maxPrice.value < PRICE_MAX ? maxPrice.value : undefined,
+    sort: sort.value,
+    page: page.value,
+    page_size: pageSize,
+  });
 }
 
 watch(
@@ -143,23 +154,6 @@ watch(maxPrice, (value) => {
     minPrice.value = value;
   }
 });
-
-watch([sort, categoryKeyword, minPrice, maxPrice], () => {
-  if (syncingRouteState.value) return;
-  page.value = 1;
-  updateRouteQuery();
-});
-
-function loadCatalog() {
-  catalog.fetchCatalog({
-    q: combinedQuery.value,
-    min_price: minPrice.value > PRICE_MIN ? minPrice.value : undefined,
-    max_price: maxPrice.value < PRICE_MAX ? maxPrice.value : undefined,
-    sort: sort.value,
-    page: page.value,
-    page_size: pageSize,
-  });
-}
 
 function applyFilters() {
   page.value = 1;
@@ -259,9 +253,7 @@ onMounted(async () => {
                 <span>Цена</span>
                 <span>{{ minPrice }} ₽ - {{ maxPrice }} ₽</span>
               </div>
-              <label class="mt-3 block text-xs font-semibold uppercase tracking-wide text-primary-dark/80">
-                От {{ minPrice }} ₽
-              </label>
+              <label class="mt-3 block text-xs font-semibold uppercase tracking-wide text-primary-dark/80">От {{ minPrice }} ₽</label>
               <input
                 v-model.number="minPrice"
                 class="brand-range mt-1"
@@ -272,9 +264,7 @@ onMounted(async () => {
                 aria-label="Минимальная цена"
               />
 
-              <label class="mt-3 block text-xs font-semibold uppercase tracking-wide text-primary-dark/80">
-                До {{ maxPrice }} ₽
-              </label>
+              <label class="mt-3 block text-xs font-semibold uppercase tracking-wide text-primary-dark/80">До {{ maxPrice }} ₽</label>
               <input
                 v-model.number="maxPrice"
                 class="brand-range mt-1"
@@ -307,7 +297,12 @@ onMounted(async () => {
       <KnitProductCard v-for="item in catalog.products" :key="item.id" :product="item" />
     </section>
 
-    <UiPagination :page="page" :page-size="pageSize" :total="catalog.total" @change="(value) => { page = value; updateRouteQuery(); }" />
+    <UiPagination
+      :page="page"
+      :page-size="pageSize"
+      :total="catalog.total"
+      @change="(value) => { page = value; updateRouteQuery(); }"
+    />
   </section>
 </template>
 

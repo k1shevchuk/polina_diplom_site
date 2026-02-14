@@ -1,7 +1,8 @@
-<script setup lang="ts">
-import { computed, onMounted } from "vue";
+﻿<script setup lang="ts">
+import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 
 import KnitProductCard from "../../components/catalog/KnitProductCard.vue";
+import UiButton from "../../components/ui/UiButton.vue";
 import UiSkeleton from "../../components/ui/UiSkeleton.vue";
 import { useAuthStore } from "../../app/stores/auth";
 import { useCatalogStore } from "../../features/catalog/store";
@@ -14,30 +15,80 @@ const auth = useAuthStore();
 const catalog = useCatalogStore();
 const favorites = useFavoritesStore();
 
-const categories = [
-  "Шарфы",
-  "Варежки",
-  "Носки",
-  "Кардиганы",
-  "Платья",
-  "Юбки",
-  "Сумки",
-  "Свитеры",
-];
+const categories = ["Шарфы", "Варежки", "Носки", "Кардиганы", "Платья", "Юбки", "Сумки", "Свитеры"];
 
 const featuredProducts = computed(() => catalog.products.slice(0, 4));
 const saleProducts = computed(() => catalog.products.slice(4, 8));
 const topProducts = computed(() => catalog.products.slice(0, 10));
-const topProductsTrack = computed(() => [...topProducts.value, ...topProducts.value]);
+
+const sliderStart = ref(0);
+const visibleCount = ref(4);
+
+let autoSlideTimer: number | null = null;
+
+const visibleTopProducts = computed(() => {
+  if (topProducts.value.length === 0) return [];
+
+  const items = [];
+  for (let i = 0; i < visibleCount.value; i += 1) {
+    const index = (sliderStart.value + i) % topProducts.value.length;
+    items.push(topProducts.value[index]);
+  }
+  return items;
+});
+
+function recalcVisibleCount() {
+  if (window.innerWidth < 640) {
+    visibleCount.value = 1;
+    return;
+  }
+  if (window.innerWidth < 1024) {
+    visibleCount.value = 2;
+    return;
+  }
+  visibleCount.value = 4;
+}
+
+function nextSlide() {
+  if (topProducts.value.length === 0) return;
+  sliderStart.value = (sliderStart.value + 1) % topProducts.value.length;
+}
+
+function prevSlide() {
+  if (topProducts.value.length === 0) return;
+  sliderStart.value = (sliderStart.value - 1 + topProducts.value.length) % topProducts.value.length;
+}
+
+function startAutoSlide() {
+  if (autoSlideTimer !== null) {
+    window.clearInterval(autoSlideTimer);
+  }
+  autoSlideTimer = window.setInterval(() => {
+    nextSlide();
+  }, 5000);
+}
 
 onMounted(async () => {
+  recalcVisibleCount();
+  window.addEventListener("resize", recalcVisibleCount, { passive: true });
+
   await catalog.fetchCatalog({ sort: "popular", page: 1, page_size: 20 });
+
   if (auth.isAuthenticated) {
     try {
       await favorites.fetchFavorites();
     } catch {
       favorites.items = [];
     }
+  }
+
+  startAutoSlide();
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener("resize", recalcVisibleCount);
+  if (autoSlideTimer !== null) {
+    window.clearInterval(autoSlideTimer);
   }
 });
 </script>
@@ -55,46 +106,44 @@ onMounted(async () => {
 
           <div class="mt-8 flex flex-wrap gap-3">
             <router-link to="/catalog" class="brand-btn px-7 py-3 text-[1.25rem]">Перейти в каталог</router-link>
-            <router-link to="/about" class="brand-btn brand-btn-outline px-7 py-3 text-[1.25rem]">
-              О бренде
-            </router-link>
+            <router-link to="/about" class="brand-btn brand-btn-outline px-7 py-3 text-[1.25rem]">О бренде</router-link>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="brand-card overflow-hidden p-5 md:p-6">
-      <header class="mb-4 flex items-end justify-between gap-3">
+    <section class="brand-card p-5 md:p-6">
+      <header class="mb-4 flex items-center justify-between gap-3">
         <div>
           <h2 class="brand-title text-4xl font-bold text-primary-dark md:text-5xl">Топ изделия недели</h2>
-          <p class="text-[1.1rem] text-muted">Бесконечная лента хитов Craft With Love</p>
+          <p class="text-[1.1rem] text-muted">Листайте вручную или дождитесь авто-прокрутки</p>
         </div>
-        <router-link to="/catalog?sort=popular" class="text-[1.1rem] font-bold text-primary-dark">В каталог</router-link>
+
+        <div class="flex gap-2">
+          <UiButton variant="secondary" aria-label="Предыдущие товары" @click="prevSlide">Назад</UiButton>
+          <UiButton aria-label="Следующие товары" @click="nextSlide">Вперёд</UiButton>
+        </div>
       </header>
 
       <UiSkeleton v-if="catalog.isLoading" :rows="2" />
 
-      <div v-else class="overflow-hidden">
-        <div class="brand-top-slider-track">
-          <router-link
-            v-for="(product, index) in topProductsTrack"
-            :key="`top-${index}-${product.id}`"
-            :to="`/product/${product.id}`"
-            class="brand-top-slide"
-            :aria-label="`Открыть товар ${cleanText(product.title, 'Вязаное изделие')}`"
-          >
-            <img
-              :src="getProductImage(product)"
-              :alt="cleanText(product.title, 'Вязаное изделие')"
-              class="h-44 w-full rounded-xl object-cover"
-              loading="lazy"
-            />
-            <p class="mt-3 line-clamp-1 text-xl font-semibold text-primary-dark">
-              {{ cleanText(product.title, "Вязаное изделие") }}
-            </p>
-            <p class="mt-1 text-lg font-bold text-primary-dark">{{ formatCurrency(product.price) }}</p>
-          </router-link>
-        </div>
+      <div v-else class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <router-link
+          v-for="product in visibleTopProducts"
+          :key="`top-${product.id}`"
+          :to="`/product/${product.id}`"
+          class="brand-product-card block p-3 no-underline"
+          :aria-label="`Открыть товар ${cleanText(product.title, 'Вязаное изделие')}`"
+        >
+          <img
+            :src="getProductImage(product)"
+            :alt="cleanText(product.title, 'Вязаное изделие')"
+            class="h-44 w-full rounded-xl object-cover"
+            loading="lazy"
+          />
+          <p class="mt-3 line-clamp-1 text-xl font-semibold text-primary-dark">{{ cleanText(product.title, "Вязаное изделие") }}</p>
+          <p class="mt-1 text-lg font-bold text-primary-dark">{{ formatCurrency(product.price) }}</p>
+        </router-link>
       </div>
     </section>
 
@@ -160,47 +209,3 @@ onMounted(async () => {
     </section>
   </section>
 </template>
-
-<style scoped>
-.brand-top-slider-track {
-  display: flex;
-  width: max-content;
-  gap: 1rem;
-  animation: top-products-marquee 36s linear infinite;
-}
-
-.brand-top-slider-track:hover {
-  animation-play-state: paused;
-}
-
-.brand-top-slide {
-  width: 220px;
-  flex: 0 0 auto;
-  border-radius: 16px;
-  background: #fff;
-  padding: 0.75rem;
-  text-decoration: none;
-  box-shadow: var(--shadow-soft);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.brand-top-slide:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-card-hover);
-}
-
-@keyframes top-products-marquee {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
-}
-
-@media (max-width: 768px) {
-  .brand-top-slide {
-    width: 180px;
-  }
-}
-</style>
