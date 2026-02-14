@@ -54,10 +54,15 @@ export const useAuthStore = defineStore("auth", () => {
   }
 
   async function logout() {
-    await api.post(endpoints.auth.logout);
-    token.value = null;
-    me.value = null;
-    setAccessToken(null);
+    try {
+      await api.post(endpoints.auth.logout);
+    } catch {
+      // Local logout must still complete even if backend session is already expired.
+    } finally {
+      token.value = null;
+      me.value = null;
+      setAccessToken(null);
+    }
   }
 
   async function toggleSeller(enabled = true) {

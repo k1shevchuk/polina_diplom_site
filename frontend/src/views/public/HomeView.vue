@@ -6,27 +6,32 @@ import UiSkeleton from "../../components/ui/UiSkeleton.vue";
 import { useAuthStore } from "../../app/stores/auth";
 import { useCatalogStore } from "../../features/catalog/store";
 import { useFavoritesStore } from "../../features/favorites/store";
+import { formatCurrency } from "../../shared/utils/currency";
+import { getProductImage } from "../../shared/utils/product-image";
+import { cleanText } from "../../shared/utils/text";
 
 const auth = useAuthStore();
 const catalog = useCatalogStore();
 const favorites = useFavoritesStore();
 
 const categories = [
-  "Шарфы",
-  "Варежки",
-  "Носки",
-  "Кардиганы",
-  "Платья",
-  "Юбки",
-  "Сумки",
-  "Свитеры",
+  "РЁР°СЂС„С‹",
+  "Р’Р°СЂРµР¶РєРё",
+  "РќРѕСЃРєРё",
+  "РљР°СЂРґРёРіР°РЅС‹",
+  "РџР»Р°С‚СЊСЏ",
+  "Р®Р±РєРё",
+  "РЎСѓРјРєРё",
+  "РЎРІРёС‚РµСЂС‹",
 ];
 
 const featuredProducts = computed(() => catalog.products.slice(0, 4));
 const saleProducts = computed(() => catalog.products.slice(4, 8));
+const topProducts = computed(() => catalog.products.slice(0, 10));
+const topProductsTrack = computed(() => [...topProducts.value, ...topProducts.value]);
 
 onMounted(async () => {
-  await catalog.fetchCatalog({ sort: "new", page: 1, page_size: 12 });
+  await catalog.fetchCatalog({ sort: "popular", page: 1, page_size: 20 });
   if (auth.isAuthenticated) {
     try {
       await favorites.fetchFavorites();
@@ -43,17 +48,52 @@ onMounted(async () => {
       <div class="brand-container brand-hero-content flex min-h-[78vh] items-center px-4 md:px-0">
         <div class="max-w-3xl py-16 md:py-20">
           <p class="font-script text-4xl text-brand-100 md:text-5xl">Craft With Love</p>
-          <h1 class="brand-title mt-4 text-5xl font-bold leading-tight md:text-7xl">Связано с любовью</h1>
+          <h1 class="brand-title mt-4 text-5xl font-bold leading-tight md:text-7xl">РЎРІСЏР·Р°РЅРѕ СЃ Р»СЋР±РѕРІСЊСЋ</h1>
           <p class="mt-6 max-w-2xl text-2xl leading-relaxed text-white/95 md:text-3xl">
-            Маркетплейс вязаных изделий ручной работы: уютные вещи для дома и гардероба, созданные мастерами с вниманием к каждой петле.
+            РњР°СЂРєРµС‚РїР»РµР№СЃ РІСЏР·Р°РЅС‹С… РёР·РґРµР»РёР№ СЂСѓС‡РЅРѕР№ СЂР°Р±РѕС‚С‹: СѓСЋС‚РЅС‹Рµ РІРµС‰Рё РґР»СЏ РґРѕРјР° Рё РіР°СЂРґРµСЂРѕР±Р°, СЃРѕР·РґР°РЅРЅС‹Рµ РјР°СЃС‚РµСЂР°РјРё СЃ РІРЅРёРјР°РЅРёРµРј Рє РєР°Р¶РґРѕР№ РїРµС‚Р»Рµ.
           </p>
 
           <div class="mt-8 flex flex-wrap gap-3">
-            <router-link to="/catalog" class="brand-btn px-7 py-3 text-[1.25rem]">Перейти в каталог</router-link>
+            <router-link to="/catalog" class="brand-btn px-7 py-3 text-[1.25rem]">РџРµСЂРµР№С‚Рё РІ РєР°С‚Р°Р»РѕРі</router-link>
             <router-link to="/about" class="brand-btn brand-btn-outline px-7 py-3 text-[1.25rem]">
-              О бренде
+              Рћ Р±СЂРµРЅРґРµ
             </router-link>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="brand-card overflow-hidden p-5 md:p-6">
+      <header class="mb-4 flex items-end justify-between gap-3">
+        <div>
+          <h2 class="brand-title text-4xl font-bold text-primary-dark md:text-5xl">РўРѕРї РёР·РґРµР»РёСЏ РЅРµРґРµР»Рё</h2>
+          <p class="text-[1.1rem] text-muted">Р‘РµСЃРєРѕРЅРµС‡РЅР°СЏ Р»РµРЅС‚Р° С…РёС‚РѕРІ Craft With Love</p>
+        </div>
+        <router-link to="/catalog?sort=popular" class="text-[1.1rem] font-bold text-primary-dark">Р’ РєР°С‚Р°Р»РѕРі</router-link>
+      </header>
+
+      <UiSkeleton v-if="catalog.isLoading" :rows="2" />
+
+      <div v-else class="overflow-hidden">
+        <div class="brand-top-slider-track">
+          <router-link
+            v-for="(product, index) in topProductsTrack"
+            :key="`top-${index}-${product.id}`"
+            :to="`/product/${product.id}`"
+            class="brand-top-slide"
+            :aria-label="`РћС‚РєСЂС‹С‚СЊ С‚РѕРІР°СЂ ${cleanText(product.title, 'Р’СЏР·Р°РЅРѕРµ РёР·РґРµР»РёРµ')}`"
+          >
+            <img
+              :src="getProductImage(product)"
+              :alt="cleanText(product.title, 'Р’СЏР·Р°РЅРѕРµ РёР·РґРµР»РёРµ')"
+              class="h-44 w-full rounded-xl object-cover"
+              loading="lazy"
+            />
+            <p class="mt-3 line-clamp-1 text-xl font-semibold text-primary-dark">
+              {{ cleanText(product.title, "Р’СЏР·Р°РЅРѕРµ РёР·РґРµР»РёРµ") }}
+            </p>
+            <p class="mt-1 text-lg font-bold text-primary-dark">{{ formatCurrency(product.price) }}</p>
+          </router-link>
         </div>
       </div>
     </section>
@@ -61,10 +101,10 @@ onMounted(async () => {
     <section class="brand-section py-0">
       <header class="mb-6 flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h2 class="brand-title text-4xl font-bold text-primary-dark md:text-5xl">Популярные товары</h2>
-          <p class="text-[1.2rem] text-muted">Выбор покупателей Craft With Love</p>
+          <h2 class="brand-title text-4xl font-bold text-primary-dark md:text-5xl">РџРѕРїСѓР»СЏСЂРЅС‹Рµ С‚РѕРІР°СЂС‹</h2>
+          <p class="text-[1.2rem] text-muted">Р’С‹Р±РѕСЂ РїРѕРєСѓРїР°С‚РµР»РµР№ Craft With Love</p>
         </div>
-        <router-link to="/catalog" class="text-[1.15rem] font-bold text-primary-dark">Смотреть всё</router-link>
+        <router-link to="/catalog" class="text-[1.15rem] font-bold text-primary-dark">РЎРјРѕС‚СЂРµС‚СЊ РІСЃС‘</router-link>
       </header>
 
       <UiSkeleton v-if="catalog.isLoading" :rows="4" />
@@ -76,22 +116,22 @@ onMounted(async () => {
 
     <section class="brand-card grid gap-5 overflow-hidden p-6 md:grid-cols-[1.1fr_1fr] md:p-8">
       <div>
-        <h2 class="brand-title text-4xl font-bold text-primary-dark md:text-5xl">Уют и качество в каждой вещи</h2>
+        <h2 class="brand-title text-4xl font-bold text-primary-dark md:text-5xl">РЈСЋС‚ Рё РєР°С‡РµСЃС‚РІРѕ РІ РєР°Р¶РґРѕР№ РІРµС‰Рё</h2>
         <p class="mt-3 text-[1.2rem] text-muted">
-          Мы собрали мастеров, которые создают вязаные изделия из натуральных материалов. От шарфов и носков до кардиганов и сумок.
+          РњС‹ СЃРѕР±СЂР°Р»Рё РјР°СЃС‚РµСЂРѕРІ, РєРѕС‚РѕСЂС‹Рµ СЃРѕР·РґР°СЋС‚ РІСЏР·Р°РЅС‹Рµ РёР·РґРµР»РёСЏ РёР· РЅР°С‚СѓСЂР°Р»СЊРЅС‹С… РјР°С‚РµСЂРёР°Р»РѕРІ. РћС‚ С€Р°СЂС„РѕРІ Рё РЅРѕСЃРєРѕРІ РґРѕ РєР°СЂРґРёРіР°РЅРѕРІ Рё СЃСѓРјРѕРє.
         </p>
-        <router-link to="/customers" class="brand-btn mt-5 px-6 py-3 text-[1.15rem]">Условия для покупателей</router-link>
+        <router-link to="/customers" class="brand-btn mt-5 px-6 py-3 text-[1.15rem]">РЈСЃР»РѕРІРёСЏ РґР»СЏ РїРѕРєСѓРїР°С‚РµР»РµР№</router-link>
       </div>
       <img
         src="/brand/about-preview.jpeg"
-        alt="Вязаные изделия Craft With Love"
+        alt="Р’СЏР·Р°РЅС‹Рµ РёР·РґРµР»РёСЏ Craft With Love"
         class="h-full max-h-[360px] w-full rounded-2xl object-cover"
         loading="lazy"
       />
     </section>
 
     <section>
-      <h2 class="brand-title mb-4 text-4xl font-bold text-primary-dark md:text-5xl">Категории knitwear</h2>
+      <h2 class="brand-title mb-4 text-4xl font-bold text-primary-dark md:text-5xl">РљР°С‚РµРіРѕСЂРёРё knitwear</h2>
       <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <router-link
           v-for="category in categories"
@@ -107,10 +147,10 @@ onMounted(async () => {
     <section>
       <header class="mb-6 flex items-end justify-between gap-4">
         <div>
-          <h2 class="brand-title text-4xl font-bold text-primary-dark md:text-5xl">Новые поступления</h2>
-          <p class="text-[1.2rem] text-muted">Свежие работы мастеров</p>
+          <h2 class="brand-title text-4xl font-bold text-primary-dark md:text-5xl">РќРѕРІС‹Рµ РїРѕСЃС‚СѓРїР»РµРЅРёСЏ</h2>
+          <p class="text-[1.2rem] text-muted">РЎРІРµР¶РёРµ СЂР°Р±РѕС‚С‹ РјР°СЃС‚РµСЂРѕРІ</p>
         </div>
-        <router-link to="/catalog?sort=new" class="text-[1.15rem] font-bold text-primary-dark">Новинки</router-link>
+        <router-link to="/catalog?sort=new" class="text-[1.15rem] font-bold text-primary-dark">РќРѕРІРёРЅРєРё</router-link>
       </header>
 
       <UiSkeleton v-if="catalog.isLoading" :rows="4" />
@@ -120,3 +160,47 @@ onMounted(async () => {
     </section>
   </section>
 </template>
+
+<style scoped>
+.brand-top-slider-track {
+  display: flex;
+  width: max-content;
+  gap: 1rem;
+  animation: top-products-marquee 36s linear infinite;
+}
+
+.brand-top-slider-track:hover {
+  animation-play-state: paused;
+}
+
+.brand-top-slide {
+  width: 220px;
+  flex: 0 0 auto;
+  border-radius: 16px;
+  background: #fff;
+  padding: 0.75rem;
+  text-decoration: none;
+  box-shadow: var(--shadow-soft);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.brand-top-slide:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-card-hover);
+}
+
+@keyframes top-products-marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@media (max-width: 768px) {
+  .brand-top-slide {
+    width: 180px;
+  }
+}
+</style>

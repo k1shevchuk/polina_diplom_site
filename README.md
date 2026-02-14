@@ -1,81 +1,86 @@
-# Craft With Love MVP
+ï»¿# Craft With Love MVP
 
-MVP ìàðêåòïëåéñà âÿçàíûõ èçäåëèé ðó÷íîé ðàáîòû (`Vue 3 + FastAPI + MySQL`).
-Áðåíä: **Craft With Love**. Òîí: «Ñâÿçàíî ñ ëþáîâüþ».
+MVP Ð¼Ð°Ñ€ÐºÐµÑ‚Ð¿Ð»ÐµÐ¹ÑÐ° Ð²ÑÐ·Ð°Ð½Ñ‹Ñ… Ð¸Ð·Ð´ÐµÐ»Ð¸Ð¹ Ñ€ÑƒÑ‡Ð½Ð¾Ð¹ Ñ€Ð°Ð±Ð¾Ñ‚Ñ‹ Ð½Ð° ÑÑ‚ÐµÐºÐµ `Vue 3 + FastAPI + MySQL`.
+Ð‘Ñ€ÐµÐ½Ð´: **Craft With Love**. Ð¢Ð¾Ð½: Â«Ð¡Ð²ÑÐ·Ð°Ð½Ð¾ Ñ Ð»ÑŽÐ±Ð¾Ð²ÑŒÑŽÂ».
 
-## Ñòåê
+## Ð¡Ñ‚ÐµÐº
 - Frontend: Vue 3, Vite, TypeScript, Vue Router, Pinia, Tailwind
 - Backend: FastAPI, SQLAlchemy 2.x (sync), Alembic
 - DB: MySQL 8
 - Dev/Prod: Docker Compose, Nginx, certbot (Let's Encrypt)
 
-## Ñòðóêòóðà ðåïîçèòîðèÿ
-- `backend/` — API, ìîäåëè, ñåðâèñû, ìèãðàöèè, pytest
-- `frontend/` — SPA (public/buyer/seller/admin)
-- `infra/nginx/` — êîíôèãè reverse proxy
-- `scripts/` — ñèäèíã è óòèëèòû
-- `docs/reference-audit.md` — àóäèò ðåôåðåíñà knitwear
+## Ð¡Ñ‚Ñ€ÑƒÐºÑ‚ÑƒÑ€Ð°
+- `backend/` â€” API, Ð¼Ð¾Ð´ÐµÐ»Ð¸, ÑÐµÑ€Ð²Ð¸ÑÑ‹, Ð¼Ð¸Ð³Ñ€Ð°Ñ†Ð¸Ð¸, Ñ‚ÐµÑÑ‚Ñ‹
+- `frontend/` â€” SPA (public/buyer/seller/admin)
+- `infra/nginx/` â€” ÐºÐ¾Ð½Ñ„Ð¸Ð³Ð¸ reverse proxy
+- `scripts/` â€” ÑÐ¸Ð´Ð¸Ð½Ð³ Ð¸ ÑƒÑ‚Ð¸Ð»Ð¸Ñ‚Ñ‹
+- `reference/knitwear-shop1/` â€” Ð´Ð¸Ð·Ð°Ð¹Ð½-Ñ€ÐµÑ„ÐµÑ€ÐµÐ½Ñ
 
-## Ëîêàëüíûé çàïóñê (Windows + Docker Desktop)
-1. Ñîçäàòü `.env` èç øàáëîíà:
-   - PowerShell: `Copy-Item .env.example .env`
-2. Ïîäíÿòü ñåðâèñû:
-   - `make up`
-3. Ïðèìåíèòü ìèãðàöèè:
-   - `make migrate`
-4. Âûïîëíèòü ñèäèíã äåìî-äàííûõ:
-   - `make seed`
+## Ð›Ð¾ÐºÐ°Ð»ÑŒÐ½Ñ‹Ð¹ Ð·Ð°Ð¿ÑƒÑÐº (Windows + Docker Desktop)
+1. Ð¡Ð¾Ð·Ð´Ð°Ñ‚ÑŒ `.env` Ð¸Ð· ÑˆÐ°Ð±Ð»Ð¾Ð½Ð°:
+   - `Copy-Item .env.example .env`
+2. ÐŸÐ¾Ð´Ð½ÑÑ‚ÑŒ ÑÐµÑ€Ð²Ð¸ÑÑ‹:
+   - `docker compose up -d --build`
+3. ÐŸÑ€Ð¸Ð¼ÐµÐ½Ð¸Ñ‚ÑŒ Ð¼Ð¸Ð³Ñ€Ð°Ñ†Ð¸Ð¸:
+   - `docker compose run --rm migrate`
+4. Ð’Ñ‹Ð¿Ð¾Ð»Ð½Ð¸Ñ‚ÑŒ ÑÐ¸Ð´Ð¸Ð½Ð³ Ð´ÐµÐ¼Ð¾-Ð´Ð°Ð½Ð½Ñ‹Ñ…:
+   - `docker compose exec backend sh -lc "PYTHONPATH=/app python /scripts/seed.py"`
 
-### URL
+## URL
 - Frontend: `http://localhost:5173`
-- Backend docs (OpenAPI): `http://localhost:8000/docs`
-- Adminer: `make tools-up` -> `http://localhost:8080`
+- Backend docs: `http://localhost:8000/docs`
+- Adminer: `http://localhost:8080`
 
-## Äåìî-àêêàóíòû
+## Ð”ÐµÐ¼Ð¾-Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ñ‹
+Ð¤Ð¸ÐºÑÐ¸Ñ€Ð¾Ð²Ð°Ð½Ð½Ñ‹Ðµ:
 - `admin@example.com` / `Admin12345`
 - `seller@example.com` / `Seller12345`
 - `buyer@example.com` / `Buyer12345`
 
-Åñëè íå ïîëó÷àåòñÿ àâòîðèçîâàòüñÿ (401/invalid credentials), îáû÷íî ïðè÷èíà â òîì, ÷òî ñèäèíã íå çàïóñêàëñÿ äëÿ òåêóùåãî volume ÁÄ.
-Ïðîâåðüòå ïî øàãàì:
-1. `make migrate`
-2. `make seed`
-3. Ïîâòîðèòå âõîä
+Ð”Ð¾Ð¿Ð¾Ð»Ð½Ð¸Ñ‚ÐµÐ»ÑŒÐ½Ð¾ Ð¿Ð¾ÑÐ»Ðµ `seed` ÑÐ¾Ð·Ð´Ð°ÑŽÑ‚ÑÑ:
+- Ð²ÑÐµÐ³Ð¾ `100` Ð¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»ÐµÐ¹
+- Ð¾ÐºÐ¾Ð»Ð¾ `12` Ð¿Ñ€Ð¾Ð´Ð°Ð²Ñ†Ð¾Ð² (Ð²ÐºÐ»ÑŽÑ‡Ð°Ñ `seller@example.com`)
+- Ð´Ð¾Ð¿Ð¾Ð»Ð½Ð¸Ñ‚ÐµÐ»ÑŒÐ½Ñ‹Ðµ Ð¿Ñ€Ð¾Ð´Ð°Ð²Ñ†Ñ‹: `seller01@craftwithlove.ru ... seller11@craftwithlove.ru` (Ð¿Ð°Ñ€Ð¾Ð»ÑŒ `Seller12345`)
+- Ð´Ð¾Ð¿Ð¾Ð»Ð½Ð¸Ñ‚ÐµÐ»ÑŒÐ½Ñ‹Ðµ Ð¿Ð¾ÐºÑƒÐ¿Ð°Ñ‚ÐµÐ»Ð¸: `buyer001@craftwithlove.ru ...` (Ð¿Ð°Ñ€Ð¾Ð»ÑŒ `Buyer12345`)
 
-Åñëè âûïîëíÿëñÿ `make clean`, äàííûå ÁÄ óäàëÿþòñÿ, ñèäèíã íóæíî âûïîëíèòü çàíîâî.
+Ð’Ð°Ð¶Ð½Ð¾: Ñ‚ÐµÐºÑƒÑ‰Ð¸Ð¹ `seed` Ð¿ÐµÑ€ÐµÑÐ¾Ð·Ð´Ð°Ñ‘Ñ‚ Ð´Ð¾Ð¼ÐµÐ½Ð½Ñ‹Ðµ demo-Ð´Ð°Ð½Ð½Ñ‹Ðµ (Ñ‚Ð¾Ð²Ð°Ñ€Ñ‹/Ð·Ð°ÐºÐ°Ð·Ñ‹/ÑÐ¾Ð¾Ð±Ñ‰ÐµÐ½Ð¸Ñ/Ð¸Ð·Ð±Ñ€Ð°Ð½Ð½Ð¾Ðµ) Ð´Ð»Ñ ÐºÐ¾Ð½ÑÐ¸ÑÑ‚ÐµÐ½Ñ‚Ð½Ð¾Ð¹ ÑÑ€ÐµÐ´Ñ‹.
 
-## Ìèãðàöèè
-- Îñíîâíîé ïóòü: `make migrate`
-- Âðó÷íóþ:
-  - `docker compose run --rm migrate`
-  - èëè âíóòðè backend: `alembic upgrade head`
+## Ð§Ñ‚Ð¾ ÑƒÐ¶Ðµ Ð² demo-Ð´Ð°Ð½Ð½Ñ‹Ñ…
+- ÐšÐ°Ñ‚ÐµÐ³Ð¾Ñ€Ð¸Ð¸ knitwear: scarves, mittens, socks, cardigans, dresses, skirts, bags, sweaters
+- ÐšÐ°Ñ€Ñ‚Ð¾Ñ‡ÐºÐ¸ Ñ‚Ð¾Ð²Ð°Ñ€Ð¾Ð² Ð¸Ð· Ñ€ÐµÑ„ÐµÑ€ÐµÐ½ÑÐ° (`/brand/products/*.jpg`), Ð±ÐµÐ· ÑÑ‚Ð°Ñ€Ñ‹Ñ… placeholder `vase`
+- Ð—Ð°ÐºÐ°Ð·Ñ‹, Ð¾Ñ‚Ð·Ñ‹Ð²Ñ‹, Ð¿ÐµÑ€ÐµÐ¿Ð¸ÑÐºÐ¸, ÑƒÐ²ÐµÐ´Ð¾Ð¼Ð»ÐµÐ½Ð¸Ñ, Ð¸Ð·Ð±Ñ€Ð°Ð½Ð½Ð¾Ðµ, ÐºÐ¾Ñ€Ð·Ð¸Ð½Ñ‹
 
-## Ïî÷åìó backend íå óõîäèò â restart loop
-`backend` çàïóñêàåò òîëüêî `uvicorn`.
-Ìèãðàöèè âûíåñåíû îòäåëüíî (`make migrate` / service `migrate`), ïîýòîìó ïàäåíèå ìèãðàöèè íå ïåðåçàïóñêàåò API ïî êðóãó.
+## ÐÐ°Ð²Ð¸Ð³Ð°Ñ†Ð¸Ñ Ð¿Ð¾ Ñ€Ð¾Ð»ÑÐ¼
+- ÐŸÐ¾ÑÐ»Ðµ Ð»Ð¾Ð³Ð¸Ð½Ð° Ð² Ð²ÐµÑ€Ñ…Ð½ÐµÐ¼ Ð¼ÐµÐ½ÑŽ Ð¿Ð¾ÑÐ²Ð»ÑÑŽÑ‚ÑÑ Ñ€Ð¾Ð»ÐµÐ²Ñ‹Ðµ ÑÑÑ‹Ð»ÐºÐ¸:
+  - `ÐšÐ°Ð±Ð¸Ð½ÐµÑ‚ Ð¿Ñ€Ð¾Ð´Ð°Ð²Ñ†Ð°` Ð´Ð»Ñ `SELLER`
+  - `ÐÐ´Ð¼Ð¸Ð½ÐºÐ°` Ð´Ð»Ñ `ADMIN`
+- ÐÐ´Ð¼Ð¸Ð½-Ð¿Ð°Ð½ÐµÐ»ÑŒ: `http://localhost:5173/admin`
 
-## Ïðîâåðêè êà÷åñòâà
-- Backend lint: `docker compose exec backend ruff check app tests`
-- Backend tests: `docker compose run --rm backend pytest -q`
-- Frontend lint: `docker compose run --rm --no-deps frontend npm run lint`
-- Frontend tests: `docker compose run --rm --no-deps frontend npm run test`
-- Frontend build: `docker compose run --rm --no-deps frontend npm run build`
+## ÐŸÑ€Ð¾Ð²ÐµÑ€ÐºÐ¸ ÐºÐ°Ñ‡ÐµÑÑ‚Ð²Ð°
+ÐšÐ¾Ð¼Ð°Ð½Ð´Ñ‹ `make` Ð½Ð° Windows Ð¼Ð¾Ð³ÑƒÑ‚ Ð±Ñ‹Ñ‚ÑŒ Ð½ÐµÐ´Ð¾ÑÑ‚ÑƒÐ¿Ð½Ñ‹ Ð² PowerShell. Ð­ÐºÐ²Ð¸Ð²Ð°Ð»ÐµÐ½Ñ‚ `verify`:
+- `docker compose config`
+- `docker compose -f docker-compose.prod.yml config`
+- `docker compose run --rm backend ruff check app tests`
+- `docker compose run --rm backend pytest -q`
+- `docker compose run --rm --no-deps frontend npm run lint`
+- `docker compose run --rm --no-deps frontend npm run test`
+- `docker compose run --rm --no-deps frontend npm run build`
 
 ## Production deploy (VM)
-1. Óñòàíîâèòü Docker Engine + Docker Compose plugin.
-2. Îòêðûòü ïîðòû `80` è `443`.
-3. DNS â reg.ru:
+1. Ð£ÑÑ‚Ð°Ð½Ð¾Ð²Ð¸Ñ‚ÑŒ Docker + Compose plugin.
+2. ÐžÑ‚ÐºÑ€Ñ‹Ñ‚ÑŒ Ð¿Ð¾Ñ€Ñ‚Ñ‹ `80` Ð¸ `443`.
+3. ÐÐ°ÑÑ‚Ñ€Ð¾Ð¸Ñ‚ÑŒ DNS Ð² reg.ru:
    - `A @ -> <VM_IP>`
    - `A www -> <VM_IP>`
-4. Çàïîëíèòü `.env` (ìèíèìóì: `DOMAIN`, `EMAIL`, `SECRET_KEY`, `DATABASE_URL`).
-5. Çàïóñòèòü ïðîä-ñòåê:
+4. Ð—Ð°Ð¿Ð¾Ð»Ð½Ð¸Ñ‚ÑŒ `.env` (`DOMAIN`, `EMAIL`, `SECRET_KEY`, `DATABASE_URL`).
+5. Ð—Ð°Ð¿ÑƒÑÑ‚Ð¸Ñ‚ÑŒ ÑÑ‚ÐµÐº:
    - `docker compose -f docker-compose.prod.yml up -d --build`
-6. Âûïóñòèòü ñåðòèôèêàò:
+6. Ð’Ñ‹Ð¿ÑƒÑÑ‚Ð¸Ñ‚ÑŒ ÑÐµÑ€Ñ‚Ð¸Ñ„Ð¸ÐºÐ°Ñ‚:
    - `docker compose -f docker-compose.prod.yml run --rm certbot certonly --webroot -w /var/www/certbot -d your-domain.tld -d www.your-domain.tld --email your-email@domain.tld --agree-tos --no-eff-email`
-7. Ïåðåçàïóñòèòü Nginx:
+7. ÐŸÐµÑ€ÐµÐ·Ð°Ð¿ÑƒÑÑ‚Ð¸Ñ‚ÑŒ Nginx:
    - `docker compose -f docker-compose.prod.yml restart nginx`
 
-## Ðåçåðâíûå êîïèè
+## Ð‘ÑÐºÐ°Ð¿Ñ‹
 - MySQL dump:
   - `docker compose exec db mysqldump -u root -p$MYSQL_ROOT_PASSWORD $MYSQL_DATABASE > backup.sql`
 - Media volume:

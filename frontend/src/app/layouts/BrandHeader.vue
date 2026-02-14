@@ -13,6 +13,8 @@ const isMobileMenuOpen = ref(false);
 const isScrolled = ref(false);
 
 const accountRoute = computed(() => (auth.isAuthenticated ? "/me" : "/auth/login"));
+const showSellerPanelLink = computed(() => auth.isAuthenticated && auth.hasRole("SELLER"));
+const showAdminPanelLink = computed(() => auth.isAuthenticated && auth.hasRole("ADMIN"));
 const cartItemsCount = computed(
   () => cartStore.cart?.items.reduce((acc, item) => acc + item.qty, 0) ?? 0,
 );
@@ -76,6 +78,8 @@ onBeforeUnmount(() => {
           Корзина
           <span v-if="cartItemsCount > 0" class="brand-cart-badge">{{ cartItemsCount }}</span>
         </router-link>
+        <router-link v-if="showSellerPanelLink" class="brand-nav-link" to="/seller/dashboard">Кабинет продавца</router-link>
+        <router-link v-if="showAdminPanelLink" class="brand-nav-link" to="/admin">Админка</router-link>
         <router-link class="brand-nav-link" :to="accountRoute">Личный кабинет</router-link>
       </nav>
 
@@ -116,6 +120,8 @@ onBeforeUnmount(() => {
             Корзина
             <span v-if="cartItemsCount > 0" class="brand-cart-badge">{{ cartItemsCount }}</span>
           </router-link>
+          <router-link v-if="showSellerPanelLink" class="brand-nav-link" to="/seller/dashboard">Кабинет продавца</router-link>
+          <router-link v-if="showAdminPanelLink" class="brand-nav-link" to="/admin">Админка</router-link>
           <router-link class="brand-nav-link" :to="accountRoute">Личный кабинет</router-link>
         </div>
       </nav>

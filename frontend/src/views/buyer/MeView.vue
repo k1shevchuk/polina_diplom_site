@@ -1,31 +1,35 @@
 <script setup lang="ts">
+import { useRouter } from "vue-router";
+
 import UiButton from "../../components/ui/UiButton.vue";
 import { useAuthStore } from "../../app/stores/auth";
 import { useUiStore } from "../../app/stores/ui";
 
 const auth = useAuthStore();
 const ui = useUiStore();
+const router = useRouter();
 
 async function becomeSeller() {
   try {
     await auth.toggleSeller(true);
-    ui.pushToast("success", "Роль продавца включена");
+    ui.pushToast("success", "Р РѕР»СЊ РїСЂРѕРґР°РІС†Р° РІРєР»СЋС‡РµРЅР°");
   } catch {
-    ui.pushToast("error", "Не удалось обновить роль");
+    ui.pushToast("error", "РќРµ СѓРґР°Р»РѕСЃСЊ РѕР±РЅРѕРІРёС‚СЊ СЂРѕР»СЊ");
   }
 }
 
 async function logout() {
   await auth.logout();
-  ui.pushToast("success", "Вы вышли из аккаунта");
+  ui.pushToast("success", "Р’С‹ РІС‹С€Р»Рё РёР· Р°РєРєР°СѓРЅС‚Р°");
+  router.replace("/auth/login");
 }
 </script>
 
 <template>
   <section class="space-y-6">
     <header class="rounded-[20px] bg-[linear-gradient(135deg,rgba(255,209,228,0.85),rgba(255,210,227,0.95))] p-6 md:p-8">
-      <h1 class="brand-title text-4xl font-bold text-primary-dark md:text-5xl">Личный кабинет</h1>
-      <p class="mt-2 text-[1.16rem] text-primary-dark/85">Управление профилем и ролями аккаунта</p>
+      <h1 class="brand-title text-4xl font-bold text-primary-dark md:text-5xl">Р›РёС‡РЅС‹Р№ РєР°Р±РёРЅРµС‚</h1>
+      <p class="mt-2 text-[1.16rem] text-primary-dark/85">РЈРїСЂР°РІР»РµРЅРёРµ РїСЂРѕС„РёР»РµРј Рё СЂРѕР»СЏРјРё Р°РєРєР°СѓРЅС‚Р°</p>
     </header>
 
     <section class="brand-card p-6">
@@ -36,34 +40,34 @@ async function logout() {
           </div>
           <div>
             <h2 class="brand-title text-4xl font-bold text-primary-dark">{{ auth.me?.email }}</h2>
-            <p class="text-[1.08rem] text-muted">Роли: {{ auth.me?.roles.join(", ") || "-" }}</p>
+            <p class="text-[1.08rem] text-muted">Р РѕР»Рё: {{ auth.me?.roles.join(", ") || "-" }}</p>
           </div>
         </div>
 
         <div class="flex flex-wrap gap-2">
-          <UiButton v-if="!auth.me?.roles.includes('SELLER')" @click="becomeSeller">Стать продавцом</UiButton>
-          <router-link to="/orders" class="brand-btn brand-btn-outline px-5 py-2 text-[1.02rem]">Мои заказы</router-link>
-          <UiButton variant="ghost" @click="logout">Выйти</UiButton>
+          <UiButton v-if="!auth.me?.roles.includes('SELLER')" @click="becomeSeller">РЎС‚Р°С‚СЊ РїСЂРѕРґР°РІС†РѕРј</UiButton>
+          <router-link to="/orders" class="brand-btn brand-btn-outline px-5 py-2 text-[1.02rem]">РњРѕРё Р·Р°РєР°Р·С‹</router-link>
+          <UiButton variant="ghost" @click="logout">Р’С‹Р№С‚Рё</UiButton>
         </div>
       </div>
     </section>
 
     <section class="grid gap-4 md:grid-cols-2">
       <article class="brand-card p-5">
-        <h3 class="text-3xl font-bold text-primary-dark">Покупки</h3>
-        <p class="mt-2 text-[1.08rem] text-muted">Проверяйте статусы заказов, уведомления и переписку с продавцами.</p>
+        <h3 class="text-3xl font-bold text-primary-dark">РџРѕРєСѓРїРєРё</h3>
+        <p class="mt-2 text-[1.08rem] text-muted">РџСЂРѕРІРµСЂСЏР№С‚Рµ СЃС‚Р°С‚СѓСЃС‹ Р·Р°РєР°Р·РѕРІ, СѓРІРµРґРѕРјР»РµРЅРёСЏ Рё РїРµСЂРµРїРёСЃРєСѓ СЃ РїСЂРѕРґР°РІС†Р°РјРё.</p>
         <div class="mt-4 flex flex-wrap gap-2">
-          <router-link to="/orders" class="brand-btn px-5 py-2 text-[1.02rem]">Заказы</router-link>
-          <router-link to="/messages" class="brand-btn brand-btn-outline px-5 py-2 text-[1.02rem]">Сообщения</router-link>
+          <router-link to="/orders" class="brand-btn px-5 py-2 text-[1.02rem]">Р—Р°РєР°Р·С‹</router-link>
+          <router-link to="/messages" class="brand-btn brand-btn-outline px-5 py-2 text-[1.02rem]">РЎРѕРѕР±С‰РµРЅРёСЏ</router-link>
         </div>
       </article>
 
       <article class="brand-card p-5">
-        <h3 class="text-3xl font-bold text-primary-dark">Избранное и отзывы</h3>
-        <p class="mt-2 text-[1.08rem] text-muted">Возвращайтесь к понравившимся товарам и оставляйте отзывы после покупки.</p>
+        <h3 class="text-3xl font-bold text-primary-dark">РР·Р±СЂР°РЅРЅРѕРµ Рё РѕС‚Р·С‹РІС‹</h3>
+        <p class="mt-2 text-[1.08rem] text-muted">Р’РѕР·РІСЂР°С‰Р°Р№С‚РµСЃСЊ Рє РїРѕРЅСЂР°РІРёРІС€РёРјСЃСЏ С‚РѕРІР°СЂР°Рј Рё РѕСЃС‚Р°РІР»СЏР№С‚Рµ РѕС‚Р·С‹РІС‹ РїРѕСЃР»Рµ РїРѕРєСѓРїРєРё.</p>
         <div class="mt-4 flex flex-wrap gap-2">
-          <router-link to="/favorites" class="brand-btn px-5 py-2 text-[1.02rem]">Избранное</router-link>
-          <router-link to="/customers" class="brand-btn brand-btn-outline px-5 py-2 text-[1.02rem]">Покупателям</router-link>
+          <router-link to="/favorites" class="brand-btn px-5 py-2 text-[1.02rem]">РР·Р±СЂР°РЅРЅРѕРµ</router-link>
+          <router-link to="/customers" class="brand-btn brand-btn-outline px-5 py-2 text-[1.02rem]">РџРѕРєСѓРїР°С‚РµР»СЏРј</router-link>
         </div>
       </article>
     </section>
