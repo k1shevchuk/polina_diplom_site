@@ -65,6 +65,15 @@ MVP маркетплейса вязаных изделий ручной рабо
 - `docker compose run --rm --no-deps frontend npm run lint`
 - `docker compose run --rm --no-deps frontend npm run test`
 - `docker compose run --rm --no-deps frontend npm run build`
+- `docker compose up -d db backend frontend`
+- `docker compose --profile tools run --rm e2e`
+
+### E2E (Playwright в Docker)
+- В `docker-compose.yml` добавлен сервис `e2e` на `mcr.microsoft.com/playwright`.
+- Запуск:
+  - `docker compose up -d db backend frontend`
+  - `docker compose --profile tools run --rm e2e`
+- `make verify` теперь включает e2e (после lint/test/build).
 
 ## Production deploy (VM)
 1. Установить Docker + Compose plugin.
