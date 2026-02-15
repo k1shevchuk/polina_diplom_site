@@ -92,6 +92,7 @@ MVP маркетплейса вязаных изделий ручной рабо
    - `SSH_PORT` — SSH порт (обычно `22`)
    - `SSH_USER` — пользователь (`ubuntu`)
    - `SSH_PRIVATE_KEY` — приватный ключ для SSH
+   - `SSH_PASSPHRASE` — passphrase от `SSH_PRIVATE_KEY` (если ключ защищён паролем)
    - `DEPLOY_PATH` — путь к проекту на сервере (`/home/ubuntu/diplom_site`)
 4. Включить branch protection для `master`: merge только через PR и только при зелёном `CI`.
 
