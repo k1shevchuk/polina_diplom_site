@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { computed } from "vue";
+
 const props = withDefaults(
   defineProps<{
     page: number;
@@ -9,7 +11,7 @@ const props = withDefaults(
 );
 const emit = defineEmits<{ (e: "change", page: number): void }>();
 
-const totalPages = Math.max(1, Math.ceil(props.total / props.pageSize));
+const totalPages = computed(() => Math.max(1, Math.ceil(props.total / props.pageSize)));
 </script>
 
 <template>

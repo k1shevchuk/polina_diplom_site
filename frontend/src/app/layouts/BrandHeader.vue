@@ -62,7 +62,7 @@ onBeforeUnmount(() => {
   <header class="brand-header" :class="{ 'brand-header--scrolled': isScrolled }">
     <div class="brand-container flex items-center justify-between gap-3 px-4 py-3 md:px-0">
       <router-link to="/" class="flex items-center gap-3 text-white no-underline">
-        <img src="/brand/logo.png" alt="Craft With Love" class="h-12 w-12 rounded-full border-2 border-white/50 object-cover" />
+        <img src="/brand/logo.png" alt="Craft With Love" class="h-12 w-auto object-contain md:h-14" />
         <span class="font-display text-2xl font-bold leading-none md:text-[2.35rem]">Craft With Love</span>
       </router-link>
 

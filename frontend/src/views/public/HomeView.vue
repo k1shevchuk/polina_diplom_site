@@ -23,8 +23,12 @@ const topProducts = computed(() => catalog.products.slice(0, 10));
 
 const sliderStart = ref(0);
 const visibleCount = ref(4);
+const isDraggingTop = ref(false);
+const dragStartX = ref<number | null>(null);
+const suppressClickUntil = ref(0);
 
 let autoSlideTimer: number | null = null;
+const DRAG_THRESHOLD = 48;
 
 const visibleTopProducts = computed(() => {
   if (topProducts.value.length === 0) return [];
@@ -60,12 +64,59 @@ function prevSlide() {
 }
 
 function startAutoSlide() {
+  if (topProducts.value.length <= 1) return;
   if (autoSlideTimer !== null) {
     window.clearInterval(autoSlideTimer);
   }
   autoSlideTimer = window.setInterval(() => {
     nextSlide();
   }, 5000);
+}
+
+function stopAutoSlide() {
+  if (autoSlideTimer !== null) {
+    window.clearInterval(autoSlideTimer);
+    autoSlideTimer = null;
+  }
+}
+
+function handleTopPointerDown(event: PointerEvent) {
+  if (topProducts.value.length <= 1) return;
+  dragStartX.value = event.clientX;
+  isDraggingTop.value = true;
+  stopAutoSlide();
+  (event.currentTarget as HTMLElement | null)?.setPointerCapture(event.pointerId);
+}
+
+function handleTopPointerUp(event: PointerEvent) {
+  if (!isDraggingTop.value || dragStartX.value === null) return;
+  const delta = event.clientX - dragStartX.value;
+
+  if (Math.abs(delta) >= DRAG_THRESHOLD) {
+    if (delta < 0) {
+      nextSlide();
+    } else {
+      prevSlide();
+    }
+    suppressClickUntil.value = Date.now() + 300;
+  }
+
+  isDraggingTop.value = false;
+  dragStartX.value = null;
+  startAutoSlide();
+}
+
+function handleTopPointerCancel() {
+  isDraggingTop.value = false;
+  dragStartX.value = null;
+  startAutoSlide();
+}
+
+function onTopCardClick(event: MouseEvent) {
+  if (Date.now() < suppressClickUntil.value) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
 }
 
 onMounted(async () => {
@@ -87,9 +138,7 @@ onMounted(async () => {
 
 onBeforeUnmount(() => {
   window.removeEventListener("resize", recalcVisibleCount);
-  if (autoSlideTimer !== null) {
-    window.clearInterval(autoSlideTimer);
-  }
+  stopAutoSlide();
 });
 </script>
 
@@ -127,13 +176,24 @@ onBeforeUnmount(() => {
 
       <UiSkeleton v-if="catalog.isLoading" :rows="2" />
 
-      <div v-else class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <transition-group
+        v-else
+        name="top-carousel"
+        tag="div"
+        class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 select-none touch-pan-y"
+        :class="isDraggingTop ? 'cursor-grabbing' : 'cursor-grab'"
+        @pointerdown="handleTopPointerDown"
+        @pointerup="handleTopPointerUp"
+        @pointercancel="handleTopPointerCancel"
+        @pointerleave="handleTopPointerCancel"
+      >
         <router-link
-          v-for="product in visibleTopProducts"
-          :key="`top-${product.id}`"
+          v-for="(product, index) in visibleTopProducts"
+          :key="`top-${sliderStart}-${index}-${product.id}`"
           :to="`/product/${product.id}`"
           class="brand-product-card block p-3 no-underline"
           :aria-label="`Открыть товар ${cleanText(product.title, 'Вязаное изделие')}`"
+          @click="onTopCardClick"
         >
           <img
             :src="getProductImage(product)"
@@ -144,7 +204,7 @@ onBeforeUnmount(() => {
           <p class="mt-3 line-clamp-1 text-xl font-semibold text-primary-dark">{{ cleanText(product.title, "Вязаное изделие") }}</p>
           <p class="mt-1 text-lg font-bold text-primary-dark">{{ formatCurrency(product.price) }}</p>
         </router-link>
-      </div>
+      </transition-group>
     </section>
 
     <section class="brand-section py-0">
@@ -209,3 +269,21 @@ onBeforeUnmount(() => {
     </section>
   </section>
 </template>
+
+<style scoped>
+.top-carousel-enter-active,
+.top-carousel-leave-active,
+.top-carousel-move {
+  transition: transform 0.35s ease, opacity 0.35s ease;
+}
+
+.top-carousel-enter-from {
+  opacity: 0;
+  transform: translateX(20px);
+}
+
+.top-carousel-leave-to {
+  opacity: 0;
+  transform: translateX(-20px);
+}
+</style>
