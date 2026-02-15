@@ -5,12 +5,10 @@ on:
     branches:
       - master
       - dev
-      - staging
   push:
     branches:
       - master
       - dev
-      - staging
 
 concurrency:
   group: ci-${{ github.ref }}
