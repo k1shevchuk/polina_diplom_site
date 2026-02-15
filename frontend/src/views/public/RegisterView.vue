@@ -7,12 +7,17 @@ import UiInput from "../../components/ui/UiInput.vue";
 import { useAuthStore } from "../../app/stores/auth";
 import { useUiStore } from "../../app/stores/ui";
 
-const form = reactive({ email: "", password: "" });
+const form = reactive({ email: "", password: "", confirmPassword: "" });
 const auth = useAuthStore();
 const ui = useUiStore();
 const router = useRouter();
 
 async function submit() {
+  if (form.password !== form.confirmPassword) {
+    ui.pushToast("error", "Пароли не совпадают");
+    return;
+  }
+
   try {
     await auth.register(form.email, form.password);
     ui.pushToast("success", "Регистрация завершена");
@@ -33,6 +38,7 @@ async function submit() {
     <form class="brand-card space-y-4 p-6" @submit.prevent="submit">
       <UiInput v-model="form.email" type="email" label="Email" aria-label="Email" />
       <UiInput v-model="form.password" type="password" label="Пароль" aria-label="Пароль" />
+      <UiInput v-model="form.confirmPassword" type="password" label="Повторите пароль" aria-label="Повторите пароль" />
       <UiButton type="submit" class="w-full" :disabled="auth.isLoading">Создать аккаунт</UiButton>
     </form>
 

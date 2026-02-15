@@ -2,7 +2,6 @@
 import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 
 import KnitProductCard from "../../components/catalog/KnitProductCard.vue";
-import UiButton from "../../components/ui/UiButton.vue";
 import UiSkeleton from "../../components/ui/UiSkeleton.vue";
 import { useAuthStore } from "../../app/stores/auth";
 import { useCatalogStore } from "../../features/catalog/store";
@@ -25,9 +24,12 @@ const sliderStart = ref(0);
 const visibleCount = ref(4);
 const isDraggingTop = ref(false);
 const dragStartX = ref<number | null>(null);
+const dragOffsetX = ref(0);
+const slideDirection = ref<"next" | "prev">("next");
 const suppressClickUntil = ref(0);
 
 let autoSlideTimer: number | null = null;
+let activePointerId: number | null = null;
 const DRAG_THRESHOLD = 48;
 
 const visibleTopProducts = computed(() => {
@@ -55,11 +57,13 @@ function recalcVisibleCount() {
 
 function nextSlide() {
   if (topProducts.value.length === 0) return;
+  slideDirection.value = "next";
   sliderStart.value = (sliderStart.value + 1) % topProducts.value.length;
 }
 
 function prevSlide() {
   if (topProducts.value.length === 0) return;
+  slideDirection.value = "prev";
   sliderStart.value = (sliderStart.value - 1 + topProducts.value.length) % topProducts.value.length;
 }
 
@@ -82,15 +86,28 @@ function stopAutoSlide() {
 
 function handleTopPointerDown(event: PointerEvent) {
   if (topProducts.value.length <= 1) return;
+  if (event.pointerType === "mouse" && event.button !== 0) return;
   dragStartX.value = event.clientX;
   isDraggingTop.value = true;
+  dragOffsetX.value = 0;
+  activePointerId = event.pointerId;
   stopAutoSlide();
-  (event.currentTarget as HTMLElement | null)?.setPointerCapture(event.pointerId);
+  window.addEventListener("pointermove", handleTopPointerMove);
+  window.addEventListener("pointerup", handleTopPointerUp);
+  window.addEventListener("pointercancel", handleTopPointerCancel);
+}
+
+function handleTopPointerMove(event: PointerEvent) {
+  if (!isDraggingTop.value || dragStartX.value === null) return;
+  if (activePointerId !== null && event.pointerId !== activePointerId) return;
+  dragOffsetX.value = event.clientX - dragStartX.value;
 }
 
 function handleTopPointerUp(event: PointerEvent) {
   if (!isDraggingTop.value || dragStartX.value === null) return;
-  const delta = event.clientX - dragStartX.value;
+  if (activePointerId !== null && event.pointerId !== activePointerId) return;
+
+  const delta = dragOffsetX.value;
 
   if (Math.abs(delta) >= DRAG_THRESHOLD) {
     if (delta < 0) {
@@ -103,12 +120,23 @@ function handleTopPointerUp(event: PointerEvent) {
 
   isDraggingTop.value = false;
   dragStartX.value = null;
+  dragOffsetX.value = 0;
+  activePointerId = null;
+  window.removeEventListener("pointermove", handleTopPointerMove);
+  window.removeEventListener("pointerup", handleTopPointerUp);
+  window.removeEventListener("pointercancel", handleTopPointerCancel);
   startAutoSlide();
 }
 
-function handleTopPointerCancel() {
+function handleTopPointerCancel(event?: PointerEvent) {
+  if (event && activePointerId !== null && event.pointerId !== activePointerId) return;
   isDraggingTop.value = false;
   dragStartX.value = null;
+  dragOffsetX.value = 0;
+  activePointerId = null;
+  window.removeEventListener("pointermove", handleTopPointerMove);
+  window.removeEventListener("pointerup", handleTopPointerUp);
+  window.removeEventListener("pointercancel", handleTopPointerCancel);
   startAutoSlide();
 }
 
@@ -118,6 +146,16 @@ function onTopCardClick(event: MouseEvent) {
     event.stopPropagation();
   }
 }
+
+const topSlideStyle = computed(() => {
+  if (isDraggingTop.value) {
+    return {
+      transform: `translate3d(${dragOffsetX.value}px, 0, 0)`,
+      transition: "none",
+    };
+  }
+  return {};
+});
 
 onMounted(async () => {
   recalcVisibleCount();
@@ -138,6 +176,9 @@ onMounted(async () => {
 
 onBeforeUnmount(() => {
   window.removeEventListener("resize", recalcVisibleCount);
+  window.removeEventListener("pointermove", handleTopPointerMove);
+  window.removeEventListener("pointerup", handleTopPointerUp);
+  window.removeEventListener("pointercancel", handleTopPointerCancel);
   stopAutoSlide();
 });
 </script>
@@ -165,46 +206,42 @@ onBeforeUnmount(() => {
       <header class="mb-4 flex items-center justify-between gap-3">
         <div>
           <h2 class="brand-title text-4xl font-bold text-primary-dark md:text-5xl">Топ изделия недели</h2>
-          <p class="text-[1.1rem] text-muted">Листайте вручную или дождитесь авто-прокрутки</p>
-        </div>
-
-        <div class="flex gap-2">
-          <UiButton variant="secondary" aria-label="Предыдущие товары" @click="prevSlide">Назад</UiButton>
-          <UiButton aria-label="Следующие товары" @click="nextSlide">Вперёд</UiButton>
+          <p class="text-[1.1rem] text-muted">Свайпайте карточки мышью или пальцем, либо дождитесь авто-прокрутки</p>
         </div>
       </header>
 
       <UiSkeleton v-if="catalog.isLoading" :rows="2" />
 
-      <transition-group
-        v-else
-        name="top-carousel"
-        tag="div"
-        class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 select-none touch-pan-y"
-        :class="isDraggingTop ? 'cursor-grabbing' : 'cursor-grab'"
-        @pointerdown="handleTopPointerDown"
-        @pointerup="handleTopPointerUp"
-        @pointercancel="handleTopPointerCancel"
-        @pointerleave="handleTopPointerCancel"
-      >
-        <router-link
-          v-for="(product, index) in visibleTopProducts"
-          :key="`top-${sliderStart}-${index}-${product.id}`"
-          :to="`/product/${product.id}`"
-          class="brand-product-card block p-3 no-underline"
-          :aria-label="`Открыть товар ${cleanText(product.title, 'Вязаное изделие')}`"
-          @click="onTopCardClick"
-        >
-          <img
-            :src="getProductImage(product)"
-            :alt="cleanText(product.title, 'Вязаное изделие')"
-            class="h-44 w-full rounded-xl object-cover"
-            loading="lazy"
-          />
-          <p class="mt-3 line-clamp-1 text-xl font-semibold text-primary-dark">{{ cleanText(product.title, "Вязаное изделие") }}</p>
-          <p class="mt-1 text-lg font-bold text-primary-dark">{{ formatCurrency(product.price) }}</p>
-        </router-link>
-      </transition-group>
+      <div v-else class="overflow-hidden" @pointerdown.capture="handleTopPointerDown" @dragstart.prevent>
+        <transition :name="slideDirection === 'next' ? 'top-slide-next' : 'top-slide-prev'" mode="out-in">
+          <div
+            :key="sliderStart"
+            class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 select-none touch-pan-y"
+            :class="isDraggingTop ? 'cursor-grabbing' : 'cursor-grab'"
+            :style="topSlideStyle"
+            @dragstart.prevent
+          >
+            <router-link
+              v-for="(product, index) in visibleTopProducts"
+              :key="`top-${sliderStart}-${index}-${product.id}`"
+              :to="`/product/${product.id}`"
+              class="brand-product-card block p-3 no-underline"
+              :aria-label="`Открыть товар ${cleanText(product.title, 'Вязаное изделие')}`"
+              @click="onTopCardClick"
+            >
+              <img
+                :src="getProductImage(product)"
+                :alt="cleanText(product.title, 'Вязаное изделие')"
+                class="h-44 w-full rounded-xl object-cover"
+                loading="lazy"
+                draggable="false"
+              />
+              <p class="mt-3 line-clamp-1 text-xl font-semibold text-primary-dark">{{ cleanText(product.title, "Вязаное изделие") }}</p>
+              <p class="mt-1 text-lg font-bold text-primary-dark">{{ formatCurrency(product.price) }}</p>
+            </router-link>
+          </div>
+        </transition>
+      </div>
     </section>
 
     <section class="brand-section py-0">
@@ -271,19 +308,22 @@ onBeforeUnmount(() => {
 </template>
 
 <style scoped>
-.top-carousel-enter-active,
-.top-carousel-leave-active,
-.top-carousel-move {
-  transition: transform 0.35s ease, opacity 0.35s ease;
+.top-slide-next-enter-active,
+.top-slide-next-leave-active,
+.top-slide-prev-enter-active,
+.top-slide-prev-leave-active {
+  transition: transform 0.28s ease, opacity 0.28s ease;
 }
 
-.top-carousel-enter-from {
+.top-slide-next-enter-from,
+.top-slide-prev-leave-to {
   opacity: 0;
-  transform: translateX(20px);
+  transform: translateX(18px);
 }
 
-.top-carousel-leave-to {
+.top-slide-next-leave-to,
+.top-slide-prev-enter-from {
   opacity: 0;
-  transform: translateX(-20px);
+  transform: translateX(-18px);
 }
 </style>
