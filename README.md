@@ -75,6 +75,35 @@ MVP маркетплейса вязаных изделий ручной рабо
   - `docker compose --profile tools run --rm e2e`
 - `make verify` теперь включает e2e (после lint/test/build).
 
+## CI/CD (GitHub Actions)
+- `CI`: `.github/workflows/ci.yml`
+  - запускается на `pull_request` и `push` в `dev`, `staging`, `master`
+  - проверки: compose config, backend (`ruff`, `pytest`), frontend (`lint`, `vitest`, `build`), e2e (Playwright в Docker)
+- `Deploy Staging`: `.github/workflows/deploy-staging.yml`
+  - запускается автоматически после успешного `CI` на push в `dev`
+  - деплой ветки `dev` на staging-сервер через SSH
+- `Deploy Production`: `.github/workflows/deploy-production.yml`
+  - запускается после успешного `CI` на push в `master`
+  - также доступен ручной запуск `workflow_dispatch`
+  - использует environment `production` (рекомендуется включить ручное подтверждение в GitHub)
+
+Что нужно настроить в GitHub (один раз):
+1. Создать environments: `staging` и `production`.
+2. Для `production` включить `Required reviewers` (ручной approve перед деплоем).
+3. Добавить environment secrets (в оба environments):
+   - `SSH_HOST` — IP/домен сервера
+   - `SSH_PORT` — SSH порт (обычно `22`)
+   - `SSH_USER` — пользователь (`ubuntu`)
+   - `SSH_PRIVATE_KEY` — приватный ключ для SSH
+   - `DEPLOY_PATH` — путь к проекту на сервере (`/home/ubuntu/diplom_site`)
+4. Включить branch protection для `master`: merge только через PR и только при зелёном `CI`.
+
+Базовый поток релизов:
+1. Разработка в feature-ветке от `dev`.
+2. Merge feature -> `dev` запускает `CI` и автодеплой в staging.
+3. После проверки merge `dev` -> `master`.
+4. `CI` на `master` + approve environment `production` -> автодеплой в prod.
+
 ## Production deploy (VM)
 1. Установить Docker + Compose plugin.
 2. Открыть порты `80` и `443`.
