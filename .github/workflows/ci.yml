@@ -48,8 +48,14 @@ jobs:
       - name: Frontend build
         run: docker compose run --rm --no-deps frontend npm run build
 
-      - name: Start app stack for e2e
-        run: docker compose up -d db backend frontend
+      - name: Start database
+        run: docker compose up -d db
+
+      - name: Run migrations
+        run: docker compose --profile tools run --rm migrate
+
+      - name: Start backend and frontend
+        run: docker compose up -d backend frontend
 
       - name: Wait for frontend
         run: |
@@ -72,6 +78,9 @@ jobs:
           done
           echo "backend docs are unavailable"
           exit 1
+
+      - name: Seed demo data
+        run: docker compose exec -T backend sh -lc "PYTHONPATH=/app python /scripts/seed.py"
 
       - name: Run Playwright e2e in Docker
         run: docker compose --profile tools run --rm e2e
