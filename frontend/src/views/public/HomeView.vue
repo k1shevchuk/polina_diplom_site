@@ -24,6 +24,7 @@ const sliderStart = ref(0);
 const visibleCount = ref(4);
 const isDraggingTop = ref(false);
 const dragStartX = ref<number | null>(null);
+const dragDistanceX = ref(0);
 const dragOffsetX = ref(0);
 const slideDirection = ref<"next" | "prev">("next");
 const suppressClickUntil = ref(0);
@@ -31,6 +32,10 @@ const suppressClickUntil = ref(0);
 let autoSlideTimer: number | null = null;
 let activePointerId: number | null = null;
 const DRAG_THRESHOLD = 48;
+const CLICK_SUPPRESS_THRESHOLD = 8;
+const CLICK_SUPPRESS_MS = 320;
+const DRAG_RESISTANCE = 0.28;
+const MAX_DRAG_PREVIEW = 72;
 
 const visibleTopProducts = computed(() => {
   if (topProducts.value.length === 0) return [];
@@ -88,6 +93,7 @@ function handleTopPointerDown(event: PointerEvent) {
   if (topProducts.value.length <= 1) return;
   if (event.pointerType === "mouse" && event.button !== 0) return;
   dragStartX.value = event.clientX;
+  dragDistanceX.value = 0;
   isDraggingTop.value = true;
   dragOffsetX.value = 0;
   activePointerId = event.pointerId;
@@ -100,14 +106,21 @@ function handleTopPointerDown(event: PointerEvent) {
 function handleTopPointerMove(event: PointerEvent) {
   if (!isDraggingTop.value || dragStartX.value === null) return;
   if (activePointerId !== null && event.pointerId !== activePointerId) return;
-  dragOffsetX.value = event.clientX - dragStartX.value;
+  const rawDelta = event.clientX - dragStartX.value;
+  dragDistanceX.value = rawDelta;
+  const previewDelta = rawDelta * DRAG_RESISTANCE;
+  dragOffsetX.value = Math.max(-MAX_DRAG_PREVIEW, Math.min(MAX_DRAG_PREVIEW, previewDelta));
 }
 
 function handleTopPointerUp(event: PointerEvent) {
   if (!isDraggingTop.value || dragStartX.value === null) return;
   if (activePointerId !== null && event.pointerId !== activePointerId) return;
 
-  const delta = dragOffsetX.value;
+  const delta = dragDistanceX.value;
+
+  if (Math.abs(delta) >= CLICK_SUPPRESS_THRESHOLD) {
+    suppressClickUntil.value = Date.now() + CLICK_SUPPRESS_MS;
+  }
 
   if (Math.abs(delta) >= DRAG_THRESHOLD) {
     if (delta < 0) {
@@ -115,11 +128,11 @@ function handleTopPointerUp(event: PointerEvent) {
     } else {
       prevSlide();
     }
-    suppressClickUntil.value = Date.now() + 300;
   }
 
   isDraggingTop.value = false;
   dragStartX.value = null;
+  dragDistanceX.value = 0;
   dragOffsetX.value = 0;
   activePointerId = null;
   window.removeEventListener("pointermove", handleTopPointerMove);
@@ -132,6 +145,7 @@ function handleTopPointerCancel(event?: PointerEvent) {
   if (event && activePointerId !== null && event.pointerId !== activePointerId) return;
   isDraggingTop.value = false;
   dragStartX.value = null;
+  dragDistanceX.value = 0;
   dragOffsetX.value = 0;
   activePointerId = null;
   window.removeEventListener("pointermove", handleTopPointerMove);
@@ -140,11 +154,14 @@ function handleTopPointerCancel(event?: PointerEvent) {
   startAutoSlide();
 }
 
-function onTopCardClick(event: MouseEvent) {
-  if (Date.now() < suppressClickUntil.value) {
+function onTopCardClick(event: MouseEvent, navigate: (event?: MouseEvent) => void) {
+  if (isDraggingTop.value || Date.now() < suppressClickUntil.value) {
     event.preventDefault();
     event.stopPropagation();
+    return;
   }
+
+  navigate(event);
 }
 
 const topSlideStyle = computed(() => {
@@ -212,7 +229,13 @@ onBeforeUnmount(() => {
 
       <UiSkeleton v-if="catalog.isLoading" :rows="2" />
 
-      <div v-else class="overflow-hidden" @pointerdown.capture="handleTopPointerDown" @dragstart.prevent>
+      <div
+        v-else
+        data-testid="top-slider"
+        class="overflow-hidden"
+        @pointerdown.capture="handleTopPointerDown"
+        @dragstart.prevent
+      >
         <transition :name="slideDirection === 'next' ? 'top-slide-next' : 'top-slide-prev'" mode="out-in">
           <div
             :key="sliderStart"
@@ -224,20 +247,27 @@ onBeforeUnmount(() => {
             <router-link
               v-for="(product, index) in visibleTopProducts"
               :key="`top-${sliderStart}-${index}-${product.id}`"
+              v-slot="{ href, navigate }"
+              custom
               :to="`/product/${product.id}`"
-              class="brand-product-card block p-3 no-underline"
-              :aria-label="`Открыть товар ${cleanText(product.title, 'Вязаное изделие')}`"
-              @click="onTopCardClick"
             >
-              <img
-                :src="getProductImage(product)"
-                :alt="cleanText(product.title, 'Вязаное изделие')"
-                class="h-44 w-full rounded-xl object-cover"
-                loading="lazy"
-                draggable="false"
-              />
-              <p class="mt-3 line-clamp-1 text-xl font-semibold text-primary-dark">{{ cleanText(product.title, "Вязаное изделие") }}</p>
-              <p class="mt-1 text-lg font-bold text-primary-dark">{{ formatCurrency(product.price) }}</p>
+              <a
+                :href="href"
+                data-testid="top-slider-card"
+                class="brand-product-card block p-3 no-underline"
+                :aria-label="`Открыть товар ${cleanText(product.title, 'Вязаное изделие')}`"
+                @click="(event) => onTopCardClick(event, navigate)"
+              >
+                <img
+                  :src="getProductImage(product)"
+                  :alt="cleanText(product.title, 'Вязаное изделие')"
+                  class="h-44 w-full rounded-xl object-cover"
+                  loading="lazy"
+                  draggable="false"
+                />
+                <p class="mt-3 line-clamp-1 text-xl font-semibold text-primary-dark">{{ cleanText(product.title, "Вязаное изделие") }}</p>
+                <p class="mt-1 text-lg font-bold text-primary-dark">{{ formatCurrency(product.price) }}</p>
+              </a>
             </router-link>
           </div>
         </transition>
